@@ -24,8 +24,8 @@
 │   └── DAL.csproj
 │       ├── PackageReference : Microsoft.EntityFrameworkCore
 │       ├── PackageReference : Microsoft.EntityFrameworkCore.Design
-│		├── PackageReference : Microsoft.EntityFrameworkCore.SqlServer
-│		├── PackageReference : Microsoft.Extensions.Configuration
+│       ├── PackageReference : Microsoft.EntityFrameworkCore.SqlServer
+│       ├── PackageReference : Microsoft.Extensions.Configuration
 │       ├── PackageReference : Microsoft.Extensions.Configuration.Binder
 │       ├── PackageReference : Microsoft.Extensions.Configuration.FileExtensions
 │       ├── PackageReference : Microsoft.Extensions.Configuration.Json
