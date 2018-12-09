@@ -1,18 +1,4 @@
 # RESTAPI Smartcity project - Bepway
-
-## Agile Method
-| Todo | Doing | Done | Rejected |
-| :--- | :--- | :--- | :--- |
-| le contexte et les modèles de la DB en CodeFirst
-les DTO et exceptions
-l'authentification
-l'automapping
-l'externalisation de la connectionstring
-toute la logique
-les controllers
-la documentation en ligne Swagger/OpenAPI
-
-
 ## Structure du projet
 ```
 .root
