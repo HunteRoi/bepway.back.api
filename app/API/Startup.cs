@@ -10,6 +10,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+//using Microsoft.AspNetCore.Authentification.JwtBearer;
+//using Microsft.IdentityModel.Tokens;
+//using Swashbuckle.AspNetCore.Swagger;
+//using API.Infrastructure;
+//using AutoMapper;
+//using Model;
+using DAL;
 
 namespace API
 {
@@ -25,11 +33,25 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // externalisation de la connectionString dans appsettings.json
-            // utilisation de Swagger/OpenAPI avec Swashbuckle
-            // access_token
-            // AutoMapper (avec un profil)
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddDbContext<BepwayContext>(options => {
+                string connectionString = new ConfigurationHelper("BepWayConnectionString").GetConnectionString();
+                options.UseSqlServer(connectionString);
+            }); // externalisation de la connectionString dans appsettings.json
+            
+            /*
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "BepWay API", Version = "v1" });
+            }
+            ); // utilisation de Swagger/OpenAPI avec Swashbuckle*/
+            
+            // authentification (access_token)
+
+            //services.AddAutoMapper();// AutoMapper (avec un profil)
+            
+            services.AddMvc(/*options => {
+                options.Filters.Add(typeof(BusinessExceptionFilter));
+            }*/).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,8 +65,13 @@ namespace API
             {
                 app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
+            /*
+            app.UserSwagger();
+            app.UseSwagerrUI(c => {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BepWay API v1");
+            });
+            */
+            //app.UseHttpsRedirection();
             app.UseMvc();
         }
     }

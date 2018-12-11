@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Tests
 {
     [TestClass]
-    public class DALTests
+    public class Tests
     {
         [TestMethod]
         public void TestMethod1()
