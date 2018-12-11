@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 //using Microsft.IdentityModel.Tokens;
 //using Swashbuckle.AspNetCore.Swagger;
 //using API.Infrastructure;
-//using AutoMapper;
+using AutoMapper;
 //using Model;
 using DAL;
 
@@ -47,7 +47,7 @@ namespace API
             
             // authentification (access_token)
 
-            //services.AddAutoMapper();// AutoMapper (avec un profil)
+            services.AddAutoMapper();// AutoMapper (avec un profil)
             
             services.AddMvc(/*options => {
                 options.Filters.Add(typeof(BusinessExceptionFilter));
