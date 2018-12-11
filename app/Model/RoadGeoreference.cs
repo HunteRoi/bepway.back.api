@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public partial class RoadGeoreference
+    public class RoadGeoreference
     {
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public partial class Audit
+    public class Audit
     {
         public decimal Id { get; set; }
         public DateTime EditDate { get; set; }

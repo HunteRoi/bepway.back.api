@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public partial class History
+    public class History
     {
         public decimal Id { get; set; }
         public decimal AddressId { get; set; }

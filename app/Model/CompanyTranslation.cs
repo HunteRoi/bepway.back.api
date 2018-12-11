@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public partial class CompanyTranslation
+    public class CompanyTranslation
     {
         public decimal Id { get; set; }
         public decimal CompanyId { get; set; }

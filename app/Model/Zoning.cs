@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public partial class Zoning
+    public class Zoning
     {
         public Zoning()
         {
@@ -12,6 +12,7 @@ namespace Model
 
         public decimal Id { get; set; }
         public string Name { get; set; }
+        public byte[] RowVersion { get; set; }
 
         public virtual ICollection<Road> Road { get; set; }
     }

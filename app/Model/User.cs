@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public partial class User
+    public class User
     {
         public User()
         {
@@ -20,6 +20,7 @@ namespace Model
         public bool IsEnabled { get; set; }
         public string TodoList { get; set; }
         public string Creator { get; set; }
+        public byte[] RowVersion { get; set; }
 
         public virtual User CreatorNavigation { get; set; }
         public virtual ICollection<Audit> Audit { get; set; }

@@ -33,8 +33,8 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
             modelBuilder.HasDefaultSchema("bepway");
+
             modelBuilder.Entity<Address>(entity =>
             {
                 entity.ToTable("Address", "bepway");
@@ -47,12 +47,12 @@ namespace DAL
                 entity.Property(e => e.Address1)
                     .IsRequired()
                     .HasColumnName("address")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.City)
                     .IsRequired()
                     .HasColumnName("city")
-                    .HasMaxLength(1);
+                    .HasMaxLength(20);
 
                 entity.Property(e => e.FloorNumber)
                     .HasColumnName("floorNumber")
@@ -65,7 +65,7 @@ namespace DAL
                 entity.Property(e => e.PostalBox)
                     .IsRequired()
                     .HasColumnName("postalBox")
-                    .HasMaxLength(1);
+                    .HasMaxLength(5);
 
                 entity.Property(e => e.RoadId)
                     .HasColumnName("road_id")
@@ -98,7 +98,7 @@ namespace DAL
                 entity.Property(e => e.City)
                     .IsRequired()
                     .HasColumnName("city")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.Address)
                     .WithMany(p => p.AddressTranslation)
@@ -127,7 +127,7 @@ namespace DAL
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasColumnName("user_id")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.Audit)
@@ -153,26 +153,31 @@ namespace DAL
 
                 entity.Property(e => e.ImageUrl)
                     .HasColumnName("imageURL")
-                    .HasMaxLength(1);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.RowVersion)
+                    .IsRequired()
+                    .HasColumnName("rowVersion")
+                    .IsRowVersion();
 
                 entity.Property(e => e.Sector)
                     .IsRequired()
                     .HasColumnName("sector")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Status)
                     .IsRequired()
                     .HasColumnName("status")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.UrlSite)
                     .HasColumnName("urlSite")
-                    .HasMaxLength(1);
+                    .HasMaxLength(200);
             });
 
             modelBuilder.Entity<CompanyTranslation>(entity =>
@@ -187,7 +192,7 @@ namespace DAL
                 entity.Property(e => e.ActivitySector)
                     .IsRequired()
                     .HasColumnName("activitySector")
-                    .HasMaxLength(1);
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.CompanyId)
                     .HasColumnName("company_id")
@@ -220,7 +225,7 @@ namespace DAL
                 entity.Property(e => e.UserId)
                     .IsRequired()
                     .HasColumnName("user_id")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.Creation)
@@ -305,7 +310,7 @@ namespace DAL
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Road>(entity =>
@@ -318,6 +323,11 @@ namespace DAL
                     .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.IsPracticable).HasColumnName("isPracticable");
+
+                entity.Property(e => e.RowVersion)
+                    .IsRequired()
+                    .HasColumnName("rowVersion")
+                    .IsRowVersion();
 
                 entity.Property(e => e.ZoningId)
                     .HasColumnName("zoning_id")
@@ -365,7 +375,7 @@ namespace DAL
 
                 entity.Property(e => e.Login)
                     .HasColumnName("login")
-                    .HasMaxLength(1)
+                    .HasMaxLength(50)
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Birthdate)
@@ -374,12 +384,12 @@ namespace DAL
 
                 entity.Property(e => e.Creator)
                     .HasColumnName("creator")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasColumnName("email")
-                    .HasMaxLength(1);
+                    .HasMaxLength(200);
 
                 entity.Property(e => e.IsAdmin).HasColumnName("isAdmin");
 
@@ -388,11 +398,16 @@ namespace DAL
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasColumnName("password")
-                    .HasMaxLength(1);
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.RowVersion)
+                    .IsRequired()
+                    .HasColumnName("rowVersion")
+                    .IsRowVersion();
 
                 entity.Property(e => e.TodoList)
                     .HasColumnName("todoList")
-                    .HasMaxLength(1);
+                    .HasMaxLength(500);
 
                 entity.HasOne(d => d.CreatorNavigation)
                     .WithMany(p => p.InverseCreatorNavigation)
@@ -412,7 +427,12 @@ namespace DAL
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasMaxLength(1);
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.RowVersion)
+                    .IsRequired()
+                    .HasColumnName("rowVersion")
+                    .IsRowVersion();
             });
         }
     }

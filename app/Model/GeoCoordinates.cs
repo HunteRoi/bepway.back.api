@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public partial class GeoCoordinates
+    public class GeoCoordinates
     {
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }

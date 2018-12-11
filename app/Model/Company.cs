@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public partial class Company
+    public class Company
     {
         public Company()
         {
@@ -19,6 +19,9 @@ namespace Model
         public string Sector { get; set; }
         public string UrlSite { get; set; }
         public string Status { get; set; }
+
+        //public DbGeography Coordinates { get; set; }
+        public byte[] RowVersion { get; set; }
 
         public virtual ICollection<Audit> Audit { get; set; }
         public virtual ICollection<CompanyTranslation> CompanyTranslation { get; set; }

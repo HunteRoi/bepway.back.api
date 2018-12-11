@@ -1,6 +1,19 @@
---CREATE SCHEMA [bepway];
 USE [Bepway];
+DROP TABLE [bepway].[RoadGeoreference];
+DROP TABLE [bepway].[GeoCoordinates];
+DROP TABLE [bepway].[Audit];
+DROP TABLE [bepway].[AddressTranslation];
+DROP TABLE [bepway].[CompanyTranslation];
+DROP TABLE [bepway].[Creation];
+DROP TABLE [bepway].[Language];
+DROP TABLE [bepway].[History];
+DROP TABLE [bepway].[Address];
+DROP TABLE [bepway].[Company];
+DROP TABLE [bepway].[Road];
+DROP TABLE [bepway].[Zoning];
+DROP TABLE [bepway].[User];
 
+USE [Bepway];
 CREATE TABLE [bepway].[User] (
 	[login] nvarchar(50) NOT NULL,
 	[password] nvarchar(200) NOT NULL,
@@ -10,6 +23,7 @@ CREATE TABLE [bepway].[User] (
 	[isEnabled] [bit] NOT NULL,
 	[todoList] nvarchar(500),
 	[creator] nvarchar(50),
+	[rowVersion] [timestamp],
 	CONSTRAINT userKey PRIMARY KEY ( [login] ),
 	CONSTRAINT creatorKey FOREIGN KEY ( [creator] ) REFERENCES [bepway].[User] ( [login] )
 );
@@ -26,6 +40,7 @@ CREATE TABLE [bepway].[Zoning]
 (
 	[id] [numeric] NOT NULL IDENTITY(0,1),
 	[name] nvarchar(50) NOT NULL,
+	[rowVersion] [timestamp],
 	CONSTRAINT zoningKey PRIMARY KEY ([id])
 );
 
@@ -34,6 +49,7 @@ CREATE TABLE [bepway].[Road]
 	[id] [numeric] NOT NULL IDENTITY(0,1),
 	[isPracticable] [bit] NOT NULL,
 	[zoning_id] [numeric] NOT NULL,
+	[rowVersion] [timestamp],
 	CONSTRAINT roadKey PRIMARY KEY ([id]),
 	CONSTRAINT roadZoning FOREIGN KEY ([zoning_id]) REFERENCES [bepway].[Zoning]([id])
 );
@@ -70,6 +86,7 @@ CREATE TABLE [bepway].[Company]
 	[urlSite] nvarchar(200),
 	[status] nvarchar(50) NOT NULL,
 	[coordinates] [geography] NOT NULL,
+	[rowVersion] [timestamp],
 	CONSTRAINT companyKey PRIMARY KEY ([id])
 );
 
