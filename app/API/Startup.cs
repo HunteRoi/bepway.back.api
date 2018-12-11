@@ -71,7 +71,7 @@ namespace API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BepWay API v1");
             });
             */
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
