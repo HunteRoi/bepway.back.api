@@ -1,6 +1,0 @@
-- qui utilise Swashbuckle et Swagger/OpenAPI dans son projet?
-- qui fait du Logging dans son projet?
-- qui utilise AutoMapper dans son projet?
-- à quoi sert BusinessExceptionFilter déjà?
-- des gens qui utilisent le mode CodeFirst?
-- les annotations pour les modèles, c'est uniquement en CodeFirst?

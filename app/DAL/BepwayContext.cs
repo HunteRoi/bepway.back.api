@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-using Model;
-
-namespace DAL
+namespace Model
 {
     public partial class BepwayContext : DbContext
     {
@@ -17,143 +15,75 @@ namespace DAL
         {
         }
 
-        public virtual DbSet<Address> Address { get; set; }
-        public virtual DbSet<AddressTranslation> AddressTranslation { get; set; }
-        public virtual DbSet<Audit> Audit { get; set; }
+        public virtual DbSet<ActivitySector> ActivitySector { get; set; }
         public virtual DbSet<Company> Company { get; set; }
-        public virtual DbSet<CompanyTranslation> CompanyTranslation { get; set; }
-        public virtual DbSet<Creation> Creation { get; set; }
-        public virtual DbSet<GeoCoordinates> GeoCoordinates { get; set; }
-        public virtual DbSet<History> History { get; set; }
-        public virtual DbSet<Language> Language { get; set; }
-        public virtual DbSet<Road> Road { get; set; }
-        public virtual DbSet<RoadGeoreference> RoadGeoreference { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<Zoning> Zoning { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("bepway");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("Relational:DefaultSchema", "db_owner");
 
-            modelBuilder.Entity<Address>(entity =>
+            modelBuilder.Entity<ActivitySector>(entity =>
             {
-                entity.ToTable("Address", "bepway");
+                entity.ToTable("ActivitySector", "dbo");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("numeric(18, 0)")
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Address1)
+                entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasColumnName("address")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.City)
-                    .IsRequired()
-                    .HasColumnName("city")
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.FloorNumber)
-                    .HasColumnName("floorNumber")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.Number)
-                    .HasColumnName("number")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.PostalBox)
-                    .IsRequired()
-                    .HasColumnName("postalBox")
-                    .HasMaxLength(5);
-
-                entity.Property(e => e.RoadId)
-                    .HasColumnName("road_id")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.ZipCode)
-                    .HasColumnName("zipCode")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.HasOne(d => d.Road)
-                    .WithMany(p => p.Address)
-                    .HasForeignKey(d => d.RoadId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("addressRoad");
-            });
-
-            modelBuilder.Entity<AddressTranslation>(entity =>
-            {
-                entity.ToTable("AddressTranslation", "bepway");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.AddressId)
-                    .HasColumnName("address_id")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.City)
-                    .IsRequired()
-                    .HasColumnName("city")
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.Address)
-                    .WithMany(p => p.AddressTranslation)
-                    .HasForeignKey(d => d.AddressId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("addressTransleted");
-            });
-
-            modelBuilder.Entity<Audit>(entity =>
-            {
-                entity.ToTable("Audit", "bepway");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.CompanyId)
-                    .HasColumnName("company_id")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.EditDate)
-                    .HasColumnName("editDate")
-                    .HasColumnType("date");
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasColumnName("user_id")
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.Audit)
-                    .HasForeignKey(d => d.CompanyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("auditCompany");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Audit)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("auditUser");
+                    .HasColumnName("name")
+                    .HasMaxLength(200);
             });
 
             modelBuilder.Entity<Company>(entity =>
             {
-                entity.ToTable("Company", "bepway");
+                entity.ToTable("Company", "dbo");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("numeric(18, 0)")
                     .ValueGeneratedOnAdd();
 
+                entity.Property(e => e.ActivitySectorId)
+                    .HasColumnName("activitySector_id")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasColumnName("address")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.CreationDate)
+                    .HasColumnName("creationDate")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.CreatorId)
+                    .HasColumnName("creator_id")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Description)
+                    .HasColumnName("description")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.IdOpenData)
+                    .HasColumnName("idOpenData")
+                    .HasMaxLength(100);
+
                 entity.Property(e => e.ImageUrl)
                     .HasColumnName("imageURL")
                     .HasMaxLength(100);
+
+                entity.Property(e => e.Latitude)
+                    .HasColumnName("latitude")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.Longitude)
+                    .HasColumnName("longitude")
+                    .HasColumnType("numeric(18, 0)");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -165,213 +95,34 @@ namespace DAL
                     .HasColumnName("rowVersion")
                     .IsRowVersion();
 
-                entity.Property(e => e.Sector)
-                    .IsRequired()
-                    .HasColumnName("sector")
-                    .HasMaxLength(50);
+                entity.Property(e => e.SiteUrl)
+                    .HasColumnName("siteURL")
+                    .HasMaxLength(200);
 
                 entity.Property(e => e.Status)
                     .IsRequired()
                     .HasColumnName("status")
                     .HasMaxLength(50);
 
-                entity.Property(e => e.UrlSite)
-                    .HasColumnName("urlSite")
-                    .HasMaxLength(200);
-            });
+                entity.HasOne(d => d.ActivitySector)
+                    .WithMany(p => p.Company)
+                    .HasForeignKey(d => d.ActivitySectorId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("activitySector_fk");
 
-            modelBuilder.Entity<CompanyTranslation>(entity =>
-            {
-                entity.ToTable("CompanyTranslation", "bepway");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.ActivitySector)
-                    .IsRequired()
-                    .HasColumnName("activitySector")
-                    .HasMaxLength(100);
-
-                entity.Property(e => e.CompanyId)
-                    .HasColumnName("company_id")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.CompanyTranslation)
-                    .HasForeignKey(d => d.CompanyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("companyTranslated");
-            });
-
-            modelBuilder.Entity<Creation>(entity =>
-            {
-                entity.ToTable("Creation", "bepway");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.CompanyId)
-                    .HasColumnName("company_id")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.CreationDate)
-                    .HasColumnName("creationDate")
-                    .HasColumnType("date");
-
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasColumnName("user_id")
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.Creation)
-                    .HasForeignKey(d => d.CompanyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("creationCompany");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Creation)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("creationUser");
-            });
-
-            modelBuilder.Entity<GeoCoordinates>(entity =>
-            {
-                entity.HasKey(e => new { e.Latitude, e.Longitude })
-                    .HasName("geoCoordinatesKey");
-
-                entity.ToTable("GeoCoordinates", "bepway");
-
-                entity.Property(e => e.Latitude)
-                    .HasColumnName("latitude")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.Longitude)
-                    .HasColumnName("longitude")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.Order)
-                    .HasColumnName("order")
-                    .HasColumnType("numeric(18, 0)");
-            });
-
-            modelBuilder.Entity<History>(entity =>
-            {
-                entity.ToTable("History", "bepway");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.AddressId)
-                    .HasColumnName("address_id")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.CompanyId)
-                    .HasColumnName("company_id")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.EndDate)
-                    .HasColumnName("endDate")
-                    .HasColumnType("date");
-
-                entity.Property(e => e.StartDate)
-                    .HasColumnName("startDate")
-                    .HasColumnType("date");
-
-                entity.HasOne(d => d.Address)
-                    .WithMany(p => p.History)
-                    .HasForeignKey(d => d.AddressId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("historyAddress");
-
-                entity.HasOne(d => d.Company)
-                    .WithMany(p => p.History)
-                    .HasForeignKey(d => d.CompanyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("historyCompany");
-            });
-
-            modelBuilder.Entity<Language>(entity =>
-            {
-                entity.ToTable("Language", "bepway");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasColumnName("name")
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<Road>(entity =>
-            {
-                entity.ToTable("Road", "bepway");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.IsPracticable).HasColumnName("isPracticable");
-
-                entity.Property(e => e.RowVersion)
-                    .IsRequired()
-                    .HasColumnName("rowVersion")
-                    .IsRowVersion();
-
-                entity.Property(e => e.ZoningId)
-                    .HasColumnName("zoning_id")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.HasOne(d => d.Zoning)
-                    .WithMany(p => p.Road)
-                    .HasForeignKey(d => d.ZoningId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("roadZoning");
-            });
-
-            modelBuilder.Entity<RoadGeoreference>(entity =>
-            {
-                entity.HasKey(e => new { e.Latitude, e.Longitude, e.RoadId })
-                    .HasName("roadGeoreferenceKey");
-
-                entity.ToTable("RoadGeoreference", "bepway");
-
-                entity.Property(e => e.Latitude)
-                    .HasColumnName("latitude")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.Longitude)
-                    .HasColumnName("longitude")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.RoadId)
-                    .HasColumnName("road_id")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.HasOne(d => d.Road)
-                    .WithMany(p => p.RoadGeoreference)
-                    .HasForeignKey(d => d.RoadId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("roadRoadGeoreference");
+                entity.HasOne(d => d.Creator)
+                    .WithMany(p => p.Company)
+                    .HasForeignKey(d => d.CreatorId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("companyCreator_fk");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.Login)
-                    .HasName("userKey");
+                    .HasName("user_pk");
 
-                entity.ToTable("User", "bepway");
+                entity.ToTable("User", "dbo");
 
                 entity.Property(e => e.Login)
                     .HasColumnName("login")
@@ -400,11 +151,6 @@ namespace DAL
                     .HasColumnName("password")
                     .HasMaxLength(200);
 
-                entity.Property(e => e.RowVersion)
-                    .IsRequired()
-                    .HasColumnName("rowVersion")
-                    .IsRowVersion();
-
                 entity.Property(e => e.TodoList)
                     .HasColumnName("todoList")
                     .HasMaxLength(500);
@@ -412,27 +158,7 @@ namespace DAL
                 entity.HasOne(d => d.CreatorNavigation)
                     .WithMany(p => p.InverseCreatorNavigation)
                     .HasForeignKey(d => d.Creator)
-                    .HasConstraintName("creatorKey");
-            });
-
-            modelBuilder.Entity<Zoning>(entity =>
-            {
-                entity.ToTable("Zoning", "bepway");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasColumnName("name")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.RowVersion)
-                    .IsRequired()
-                    .HasColumnName("rowVersion")
-                    .IsRowVersion();
+                    .HasConstraintName("userCreator_fk");
             });
         }
     }

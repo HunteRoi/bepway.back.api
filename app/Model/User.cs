@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 namespace Model
 {
-    public class User
+    public partial class User
     {
         public User()
         {
-            Audit = new HashSet<Audit>();
-            Creation = new HashSet<Creation>();
+            Company = new HashSet<Company>();
             InverseCreatorNavigation = new HashSet<User>();
         }
 
@@ -20,11 +19,9 @@ namespace Model
         public bool IsEnabled { get; set; }
         public string TodoList { get; set; }
         public string Creator { get; set; }
-        public byte[] RowVersion { get; set; }
 
         public virtual User CreatorNavigation { get; set; }
-        public virtual ICollection<Audit> Audit { get; set; }
-        public virtual ICollection<Creation> Creation { get; set; }
+        public virtual ICollection<Company> Company { get; set; }
         public virtual ICollection<User> InverseCreatorNavigation { get; set; }
     }
 }

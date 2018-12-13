@@ -1,7 +1,0 @@
-Q) Comment faire pour créer le contexte de DB dans le DAL mais envoyer les modèles dans Model ?
-R) (Source : https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet#dotnet-ef-dbcontext-scaffold)
-Tape la commande : 
-dotnet ef dbcontext scaffold <CONNECTION_STRING> Microsoft.EntityFrameworkCore.SqlServer --schema bepway -o ../Model -c <CONTEXT_NAME> -f
-
-Q) 
-R) 
