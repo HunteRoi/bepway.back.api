@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Model
+using Model;
+
+namespace DAL
 {
     public partial class BepwayContext : DbContext
     {
