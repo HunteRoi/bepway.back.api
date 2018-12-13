@@ -2,7 +2,7 @@ using System;
 
 namespace DTO
 {
-    public class DtoUser
+    public class User
     {
         public string Login { get; set; }
         public string Password { get; set; }
@@ -11,6 +11,6 @@ namespace DTO
         public bool IsAdmin { get; set; }
         public bool IsEnabled { get; set; }
         public string TodoList { get; set; }
-        public string Creator { get; set; }
+        public DTO.User Creator { get; set; }
     }
 }
