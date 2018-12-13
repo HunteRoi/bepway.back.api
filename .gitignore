@@ -39,6 +39,8 @@ Thumbs.db
 
 # dotCover
 *.dotCover
+
+#ignored files
 app/DAL/appsettings.json
 app/API/appsettings.Development.json
 app/API/appsettings.json
