@@ -39,3 +39,6 @@ Thumbs.db
 
 # dotCover
 *.dotCover
+app/DAL/appsettings.json
+app/API/appsettings.Development.json
+app/API/appsettings.json
