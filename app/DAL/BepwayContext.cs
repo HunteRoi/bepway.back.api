@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-
 using Model;
 
 namespace DAL
@@ -23,13 +22,10 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
-                .HasAnnotation("Relational:DefaultSchema", "db_owner");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
             modelBuilder.Entity<ActivitySector>(entity =>
             {
-                entity.ToTable("ActivitySector", "dbo");
-
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("numeric(18, 0)")
@@ -43,8 +39,6 @@ namespace DAL
 
             modelBuilder.Entity<Company>(entity =>
             {
-                entity.ToTable("Company", "dbo");
-
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("numeric(18, 0)")
@@ -72,12 +66,15 @@ namespace DAL
                     .HasMaxLength(500);
 
                 entity.Property(e => e.IdOpenData)
+                    .IsRequired()
                     .HasColumnName("idOpenData")
                     .HasMaxLength(100);
 
                 entity.Property(e => e.ImageUrl)
                     .HasColumnName("imageURL")
                     .HasMaxLength(100);
+
+                entity.Property(e => e.IsPremium).HasColumnName("isPremium");
 
                 entity.Property(e => e.Latitude)
                     .HasColumnName("latitude")
@@ -114,6 +111,7 @@ namespace DAL
 
                 entity.HasOne(d => d.Creator)
                     .WithMany(p => p.Company)
+                    .HasPrincipalKey(p => p.Login)
                     .HasForeignKey(d => d.CreatorId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("companyCreator_fk");
@@ -121,22 +119,21 @@ namespace DAL
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.Login)
-                    .HasName("user_pk");
+                entity.HasIndex(e => e.Login)
+                    .HasName("user_uk")
+                    .IsUnique();
 
-                entity.ToTable("User", "dbo");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("numeric(18, 0)")
+                    .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Login)
-                    .HasColumnName("login")
-                    .HasMaxLength(50)
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Birthdate)
-                    .HasColumnName("birthdate")
+                entity.Property(e => e.BirthDate)
+                    .HasColumnName("birthDate")
                     .HasColumnType("date");
 
-                entity.Property(e => e.Creator)
-                    .HasColumnName("creator")
+                entity.Property(e => e.CreatorId)
+                    .HasColumnName("creator_id")
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Email)
@@ -144,22 +141,36 @@ namespace DAL
                     .HasColumnName("email")
                     .HasMaxLength(200);
 
-                entity.Property(e => e.IsAdmin).HasColumnName("isAdmin");
-
                 entity.Property(e => e.IsEnabled).HasColumnName("isEnabled");
+
+                entity.Property(e => e.Login)
+                    .IsRequired()
+                    .HasColumnName("login")
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasColumnName("password")
                     .HasMaxLength(200);
 
+                entity.Property(e => e.Roles)
+                    .IsRequired()
+                    .HasColumnName("roles")
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.RowVersion)
+                    .IsRequired()
+                    .HasColumnName("rowVersion")
+                    .IsRowVersion();
+
                 entity.Property(e => e.TodoList)
                     .HasColumnName("todoList")
                     .HasMaxLength(500);
 
-                entity.HasOne(d => d.CreatorNavigation)
-                    .WithMany(p => p.InverseCreatorNavigation)
-                    .HasForeignKey(d => d.Creator)
+                entity.HasOne(d => d.Creator)
+                    .WithMany(p => p.InverseCreator)
+                    .HasPrincipalKey(p => p.Login)
+                    .HasForeignKey(d => d.CreatorId)
                     .HasConstraintName("userCreator_fk");
             });
         }
