@@ -9,11 +9,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using API.Infrastructure;
 using DAL;
 using AutoMapper;
 using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.Extensions.Options;
 
 /*
 using System.Collections.Generic;
@@ -39,19 +39,14 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            #region Activate cross-origin requests
-            //services.AddCors();
-            #endregion
-
             #region DB process
             services.AddDbContext<BepwayContext>(options => {
-                string connectionString = new ConfigurationHelper("BepWayConnectionString").GetConnectionString();
+                string connectionString = new ConnectionHelper("BepWayConnectionString").GetConnectionString();
                 options.UseSqlServer(connectionString);
             }); // externalisation de la connectionString dans appsettings.json
             #endregion
 
             #region Swagger/OpenAPI
-            /*
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "BepWay API", Version = "v1" });
@@ -60,6 +55,10 @@ namespace API
             #endregion
 
             #region Authentification
+            Infrastructure.ConfigurationHelper helper = new Infrastructure.ConfigurationHelper();
+            string Issuer = helper.Get("Authentification:Issuer");
+            string Audience = helper.Get("Authentification:Audience");
+
             services.AddAuthorization(options =>
                 {
                     var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
@@ -68,22 +67,20 @@ namespace API
                 }
             );
 
-            SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
-                Configuration.GetValue<string>("SecretKey"))
-            );
+            SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(helper.Get("SecretKey")));
             services.Configure<JwtIssuerOptions>(options => {
-                options.Issuer = Configuration.GetValue<string>("Authentification.Issuer");
-                options.Audience = Configuration.GetValue<string>("Authentification.Audience");
+                options.Issuer = Issuer;
+                options.Audience = Audience;
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
 
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidIssuer = Configuration.GetValue<string>("Authentification.Issuer"),
+                ValidIssuer = Issuer,
 
                 ValidateAudience = true,
-                ValidAudience = Configuration.GetValue<string>("Authentification.Audience"),
+                ValidAudience = Audience,
 
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = _signingKey,
@@ -97,8 +94,8 @@ namespace API
             services
                 .AddAuthentication(options => options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => {
-                    options.Audience = Configuration.GetValue<string>("Authentification.Audience");
-                    options.ClaimsIssuer = Configuration.GetValue<string>("Authentification.Issuer");
+                    options.Audience = Audience;
+                    options.ClaimsIssuer = Issuer;
                     options.TokenValidationParameters = tokenValidationParameters;
                     options.SaveToken = true;
                 });
@@ -109,7 +106,7 @@ namespace API
             #endregion
 
             services
-                .AddMvc(/*options => options.Filters.Add(typeof(BusinessExceptionFilter));*/)
+                .AddMvc(options => options.Filters.Add(typeof(BusinessExceptionFilter)))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -125,17 +122,11 @@ namespace API
                 app.UseHsts();
             }
 
-            #region Cross-origin requests
-            //app.UseCors(builder => builder.WithOrigins("https//www.example.com","https://example.com"));
-            #endregion
-
             #region Swagger/OpenAPI
-            /*
-            app.UserSwagger();
-            app.UseSwagerrUI(c => {
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BepWay API v1");
             });
-            */
             #endregion
             
             app.UseHttpsRedirection();
