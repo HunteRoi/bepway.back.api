@@ -25,14 +25,29 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Login ([FromBody] DTO.LoginModel loginModel)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (/*loginModel == null || */!ModelState.IsValid) return BadRequest(ModelState);
 
+            // to externalize as DAL method returning null if user doesn't exist
             var repository = new DAL.AuthentificationRepository();
             Model.User userFound = repository.GetUsers().FirstOrDefault(user => 
                 user.Login == loginModel.Login && user.Password == loginModel.Password
             );
+            //
             if (userFound == null) return Unauthorized();
-            
+            if (!userFound.IsEnabled) return BadRequest("Account is disabled");
+
+            JwtSecurityToken token = await CreateToken(userFound);
+
+            return Ok(
+                new {
+                    access_token = new JwtSecurityTokenHandler().WriteToken(token),
+                    expires_in = (int)_jwtOptions.ValidFor.TotalSeconds 
+                }
+            );
+        }
+
+        private async Task<JwtSecurityToken> CreateToken(Model.User userFound)
+        {
             var claims = new List<Claim>
             {
                 new Claim(PrivateClaims.UserId,userFound.Id.ToString()),
@@ -41,12 +56,15 @@ namespace API.Controllers
                 new Claim(JwtRegisteredClaimNames.Iat, 
                     ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(),
                     ClaimValueTypes.Integer64
-                ),
-                
+                )    
             };
-            if (userFound.IsAdmin) claims.Add(new Claim(PrivateClaims.roles, Model.Constants.Roles.Admin));
+            
+            if (!String.IsNullOrEmpty(userFound.Roles)) 
+            {
+                userFound.Roles.Split(' ').ToList().ForEach(roleName => claims.Add(new Claim(PrivateClaims.Roles, roleName)));
+            }
 
-            JwtSecurityToken token = new JwtSecurityToken(
+            return new JwtSecurityToken(
                 issuer: _jwtOptions.Issuer,
                 audience: _jwtOptions.Audience,
                 claims: claims,
@@ -54,11 +72,6 @@ namespace API.Controllers
                 expires: _jwtOptions.Expiration,
                 signingCredentials: _jwtOptions.SigningCredentials
             );
-
-            return Ok(new {
-                access_token = new JwtSecurityTokenHandler().WriteToken(token),
-                expires_in = (int)_jwtOptions.ValidFor.TotalSeconds 
-            });
         }
 
         private static long ToUnixEpochDate (DateTime date) 
