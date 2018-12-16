@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[ActivitySector]
 );
 
 CREATE TABLE [dbo].[User] (
+	[id] [numeric] NOT NULL IDENTITY(0,1),
 	[login] nvarchar(50) NOT NULL,
 	[password] nvarchar(200) NOT NULL,
 	[email] nvarchar(200) NOT NULL,
@@ -20,7 +21,8 @@ CREATE TABLE [dbo].[User] (
 	[isEnabled] [bit] NOT NULL,
 	[todoList] nvarchar(500),
 	[creator] nvarchar(50),
-	CONSTRAINT user_pk PRIMARY KEY ([login]),
+	CONSTRAINT user_pk PRIMARY KEY ([id]),
+	CONSTRAINT user_uk UNIQUE ([login]),
 	CONSTRAINT userCreator_fk FOREIGN KEY ([creator]) REFERENCES [dbo].[User] ([login])
 );
 
