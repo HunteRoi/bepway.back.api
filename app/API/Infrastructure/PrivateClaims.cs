@@ -5,6 +5,6 @@ namespace API.Infrastructure
     public static class PrivateClaims
     {
         public const string UserId = "uid";
-        public const string roles = "roles";
+        public const string Roles = "roles";
     }
 }
