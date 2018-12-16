@@ -2,41 +2,46 @@
 ## Structure du projet
 ```
 .root
-├── API (webapi)
+├── API
 │   ├── Controllers 
 │   │   ├── APIController.cs : ControllerBase
-│   │   └── ...
+│   │   ├── CompanyController.cs : APIController.cs
+│   │   ├── JwtController.cs
+│   │   └── UserController.cs : APIController.cs
 │   ├── Infrastructure
-│   │   ├── AuthentificationRepository.cs ?
-│   │   ├── Profile.cs
+│   │   ├── BusinnessExceptionFilter : IExceptionFilter
+│   │   ├── ConfigurationHelper.cs
 │   │   ├── JwtIssuerOptions.cs
-│   │   └── BusinnessExceptionFilter : IExceptionFilter
+│   │   ├── MappingProfile.cs
+│   │   └── PrivateClaims.cs
+│   ├── API.csproj
 │   ├── appsettings.json
-│   │   └── ConnectionString
-│   └── API.csproj
-│       ├── PackageReference : AutoMapper
-│       ├── PackageReference : AutoMapper.Extensions.Microsoft.DependencyInjection
-│       ├── PackageReference : Swashbuckle.AspNetCore
-│       ├── ProjectReference : DTO.csproj
-│       ├── ProjectReference : DAL.csproj
-│       └── ProjectReference : Model.csproj
-├── DTO (classlib -f netcoreapp2.1)
-│   └── ...
-├── Model (classlib -f netcoreapp2.1)
-│   └── ...
-├── DAL (classlib -f netcoreapp2.1)
-│   ├── appsettings.json
-│   │   └── ConnectionString
+│   ├── Program.cs
+│   ├── secrets.json
+│   └── Startup.cs
+├── DAL
+│   ├── BepwayContext.cs : DbContext
+│   ├── CompanyDataAccess.cs
+│   ├── ConnectionHelper.cs
 │   ├── DAL.csproj
-│   │   ├── PackageReference : Microsoft.EntityFrameworkCore
-│   │   ├── PackageReference : Microsoft.EntityFrameworkCore.Design
-│   │   ├── PackageReference : Microsoft.EntityFrameworkCore.SqlServer
-│   │   ├── PackageReference : Microsoft.Extensions.Configuration
-│   │   ├── PackageReference : Microsoft.Extensions.Configuration.Binder
-│   │   ├── PackageReference : Microsoft.Extensions.Configuration.FileExtensions
-│   │   ├── PackageReference : Microsoft.Extensions.Configuration.Json
-│   │   └── ProjectReference : Model.csproj
-│   └── ...
-└── Tests (mstest) [optional]
-    └── DALTests.cs
+│   ├── DataAccess.cs
+│   ├── secrets.json
+│   └── UserDataAccess.cs
+├── DTO
+│   ├── ActivitySector.cs
+│   ├── BusinessError.cs
+│   ├── Company.cs
+│   ├── DTO.csproj
+│   ├── LoginModel.cs
+│   └── User.cs
+├── Model
+│   ├── ActivitySector.cs
+│   ├── BusinessException.cs
+│   ├── Company.cs
+│   ├── Constants.cs
+│   ├── Model.csproj
+│   └── User.cs
+└── Tests
+   ├── Tests.cs
+   └── Tests.csproj
 ```
