@@ -1,16 +1,12 @@
-using System.Collections.Generic;
 using Model;
 
 namespace DAL
 {
-    public class UserDataAccess
+    public class UserDataAccess : DataAccess<User>
     {
-        private readonly BepwayContext _context;
-
         public UserDataAccess (BepwayContext context)
         {
-            _context = context;
+            Context = context;
         }
-        
     }
 }

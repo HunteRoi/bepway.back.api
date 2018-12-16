@@ -1,6 +1,8 @@
+using Model;
+
 namespace DAL
 {
-    public class CompanyDataAccess
+    public class CompanyDataAccess : DataAccess<Company>
     {
         
     }
