@@ -6,8 +6,8 @@ namespace Model
     {
         public static class Roles
         {
-            public const string Admin = "Administrateur";
-            public const string Gestionnaire = "Gestionnaire";
+            public const string Admin = "Admin";
+            public enum Status { Draft, Existing, Expired };
         }
     }
 }

@@ -33,14 +33,19 @@ namespace API.Controllers
             );
             if (userFound == null) return Unauthorized();
             
-            var claims = new [] {
+            var claims = new List<Claim>
+            {
+                new Claim(PrivateClaims.UserId,userFound.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, userFound.Login),
                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                 new Claim(JwtRegisteredClaimNames.Iat, 
                     ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(),
                     ClaimValueTypes.Integer64
                 ),
+                
             };
+            if (userFound.IsAdmin) claims.Add(new Claim(PrivateClaims.roles, Model.Constants.Roles.Admin));
+
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _jwtOptions.Issuer,
                 audience: _jwtOptions.Audience,
