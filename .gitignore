@@ -41,6 +41,5 @@ Thumbs.db
 *.dotCover
 
 #ignored files
-app/DAL/appsettings.json
-app/API/appsettings.Development.json
-app/API/appsettings.json
+app/DAL/secrets.json
+app/API/secrets.json
