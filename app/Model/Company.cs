@@ -15,9 +15,10 @@ namespace Model
         public string Address { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
-        public DateTime? CreationDate { get; set; }
+        public DateTime CreationDate { get; set; }
         public decimal? ActivitySectorId { get; set; }
         public string CreatorId { get; set; }
+        public bool IsPremium { get; set; }
         public byte[] RowVersion { get; set; }
 
         public virtual ActivitySector ActivitySector { get; set; }

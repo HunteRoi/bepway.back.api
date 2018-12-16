@@ -7,6 +7,7 @@ namespace DTO
     {
         [Required]
         public decimal Id { get; set; }
+        [Required]
         public string IdOpenData { get; set; }
         [Required]
         public string Name { get; set; }
@@ -18,12 +19,14 @@ namespace DTO
         public string Status { get; set; }
         [Required]
         public string Address { get; set; }
+        [Required]
         public decimal Latitude { get; set; }
+        [Required]
         public decimal Longitude { get; set; }
-        public DateTime? CreationDate { get; set; }
+        [Required]
+        public DateTime CreationDate { get; set; }
         public byte[] RowVersion { get; set; }
-
-        public virtual DTO.ActivitySector ActivitySector { get; set; }
-        public virtual DTO.User Creator { get; set; }
+        public DTO.ActivitySector ActivitySector { get; set; }
+        public DTO.User Creator { get; set; }
     }
 }

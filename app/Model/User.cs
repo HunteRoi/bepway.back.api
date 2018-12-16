@@ -8,20 +8,22 @@ namespace Model
         public User()
         {
             Company = new HashSet<Company>();
-            InverseCreatorNavigation = new HashSet<User>();
+            InverseCreator = new HashSet<User>();
         }
 
+        public decimal Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
-        public DateTime Birthdate { get; set; }
-        public bool IsAdmin { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string Roles { get; set; }
         public bool IsEnabled { get; set; }
         public string TodoList { get; set; }
-        public string Creator { get; set; }
+        public string CreatorId { get; set; }
+        public byte[] RowVersion { get; set; }
 
-        public virtual User CreatorNavigation { get; set; }
+        public virtual User Creator { get; set; }
         public virtual ICollection<Company> Company { get; set; }
-        public virtual ICollection<User> InverseCreatorNavigation { get; set; }
+        public virtual ICollection<User> InverseCreator { get; set; }
     }
 }
