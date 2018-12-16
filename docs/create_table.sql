@@ -1,48 +1,52 @@
+--ALTER TABLE [dbo].[Company] DROP CONSTRAINT company_pk, activitySector_fk, companyCreator_fk;
+--ALTER TABLE [db].[User] DROP CONSTRAINT user_pl, user_uk, userCreator_fk;
+
 DROP TABLE [dbo].[Company];
 DROP TABLE [dbo].[User];
 DROP TABLE [dbo].[ActivitySector];
 
 CREATE TABLE [dbo].[ActivitySector]
 (
-	[id] [numeric] IDENTITY(0,1),
-	[name] nvarchar(200) NOT NULL,
+	[id] NUMERIC IDENTITY(0,1),
+	[name] NVARCHAR(200) NOT NULL,
 
 	CONSTRAINT activitySector_pk PRIMARY KEY ([id])
 );
 
 CREATE TABLE [dbo].[User] (
-	[id] [numeric] IDENTITY(0,1),
-	[login] nvarchar(50) NOT NULL,
-	[password] nvarchar(200) NOT NULL,
-	[email] nvarchar(200) NOT NULL,
-	[birthdate] [date] NOT NULL,
-	[isAdmin] [bit] NOT NULL,
-	[isEnabled] [bit] NOT NULL,
-	[todoList] nvarchar(500),
-	[creator] nvarchar(50),
+	[id] [NUMERIC] IDENTITY(0,1),
+	[login] NVARCHAR(50) NOT NULL,
+	[password] NVARCHAR(200) NOT NULL,
+	[email] NVARCHAR(200) NOT NULL,
+	[birthDate] DATE NOT NULL,
+	[roles] NVARCHAR(500) NOT NULL,
+	[isEnabled] BIT NOT NULL,
+	[todoList] NVARCHAR(500),
+	[creator_id] NVARCHAR(50),
+	[rowVersion] TIMESTAMP,
 
 	CONSTRAINT user_pk PRIMARY KEY ([id]),
 	CONSTRAINT user_uk UNIQUE ([login]),
-	CONSTRAINT userCreator_fk FOREIGN KEY ([creator]) REFERENCES [dbo].[User] ([login])
+	CONSTRAINT userCreator_fk FOREIGN KEY ([creator_id]) REFERENCES [dbo].[User] ([login])
 );
 
 CREATE TABLE [dbo].[Company]
 (
-	[id] [numeric] IDENTITY(0,1),
-	[idOpenData] nvarchar(100),
-	[name] nvarchar(50) NOT NULL,
-	[imageURL] nvarchar(100),
-	[siteURL] nvarchar(200),
-	[description] nvarchar(500),
-	[status] nvarchar(50) NOT NULL, -- "Draft", "Existing", "Expired"
-	[address] nvarchar(200) NOT NULL,
-	[latitude] [numeric] NOT NULL,
-	[longitude] [numeric] NOT NULL,
-	[creationDate] [date],
-	[activitySector_id] [numeric],
-	[creator_id] nvarchar(50),
-	[isPremium] [bit] NOT NULL,
-	[rowVersion] [timestamp],
+	[id] [NUMERIC] IDENTITY(0,1),
+	[idOpenData] NVARCHAR(100) NOT NULL,
+	[name] NVARCHAR(50) NOT NULL,
+	[imageURL] NVARCHAR(100),
+	[siteURL] NVARCHAR(200),
+	[description] NVARCHAR(500),
+	[status] NVARCHAR(50) NOT NULL, -- "Draft", "Existing", "Expired"
+	[address] NVARCHAR(200) NOT NULL,
+	[latitude] NUMERIC NOT NULL,
+	[longitude] NUMERIC NOT NULL,
+	[creationDate] DATE NOT NULL,
+	[activitySector_id] [NUMERIC],
+	[creator_id] NVARCHAR(50),
+	[isPremium] BIT NOT NULL,
+	[rowVersion] TIMESTAMP,
 
 	CONSTRAINT company_pk PRIMARY KEY ([id]),
 	CONSTRAINT activitySector_fk 
