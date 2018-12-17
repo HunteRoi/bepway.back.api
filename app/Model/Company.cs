@@ -5,7 +5,7 @@ namespace Model
 {
     public partial class Company
     {
-        public decimal Id { get; set; }
+        public int Id { get; set; }
         public string IdOpenData { get; set; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
@@ -16,7 +16,7 @@ namespace Model
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public DateTime CreationDate { get; set; }
-        public decimal? ActivitySectorId { get; set; }
+        public int? ActivitySectorId { get; set; }
         public string CreatorId { get; set; }
         public bool IsPremium { get; set; }
         public byte[] RowVersion { get; set; }

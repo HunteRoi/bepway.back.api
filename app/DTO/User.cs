@@ -6,7 +6,7 @@ namespace DTO
     public class User
     {
         [Required]
-        public decimal Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Login { get; set; }
         [EmailAddress]

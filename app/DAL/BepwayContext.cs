@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+
 using Model;
 
 namespace DAL
@@ -19,17 +20,14 @@ namespace DAL
         public virtual DbSet<ActivitySector> ActivitySector { get; set; }
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<User> User { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
             modelBuilder.Entity<ActivitySector>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -39,14 +37,9 @@ namespace DAL
 
             modelBuilder.Entity<Company>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.ActivitySectorId)
-                    .HasColumnName("activitySector_id")
-                    .HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.ActivitySectorId).HasColumnName("activitySector_id");
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -123,10 +116,7 @@ namespace DAL
                     .HasName("user_uk")
                     .IsUnique();
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("numeric(18, 0)")
-                    .ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.BirthDate)
                     .HasColumnName("birthDate")

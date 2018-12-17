@@ -36,6 +36,6 @@ INSERT
 		'',
 		'samuel.scholtes@bep.be',
 		'19840101',
-		'Gestionnary',
+		'User',
 		0
 	);

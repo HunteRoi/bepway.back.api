@@ -13,7 +13,7 @@ namespace API.Controllers
 {
     [AllowAnonymous]
     [Route("api/jwt")]
-    public class JwtController : APIController
+    public class JwtController : ControllerBase
     {
         private readonly JwtIssuerOptions _jwtOptions;
 
