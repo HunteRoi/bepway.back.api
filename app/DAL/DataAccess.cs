@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using AutoMapper;
 
 namespace DAL
 {
@@ -14,8 +13,6 @@ namespace DAL
         public abstract Task<IEnumerable<T>> GetAllAsync (int? pageIndex = 0, int? pageSize = 15, string name = null);
         public abstract Task<T> FindByIdAsync (int id);
         public abstract Task AddAsync (T data);
-        protected abstract Task DeleteAsync (T data);
-        public abstract Task<T> DeleteByIdAsync (int id);
-        public abstract Task<T> EditAsync (T data, IMapper mapper); 
+        public abstract Task DeleteAsync (T data);
     }
 }
