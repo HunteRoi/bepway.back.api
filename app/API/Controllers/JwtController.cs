@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using API.Infrastructure;
+using DAL;
 
 namespace API.Controllers
 {
@@ -17,7 +18,7 @@ namespace API.Controllers
     {
         private readonly JwtIssuerOptions _jwtOptions;
 
-        public JwtController(IOptions<JwtIssuerOptions> jwtOptions, DAL.BepwayContext context) 
+        public JwtController(IOptions<JwtIssuerOptions> jwtOptions, BepwayContext context) 
         {
             Context = context;
             _jwtOptions = jwtOptions.Value;
@@ -27,10 +28,10 @@ namespace API.Controllers
         public async Task<IActionResult> Login ([FromBody] DTO.LoginModel loginModel)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            string password = /*encrypt*/ loginModel.Password;
-            Model.User userFound = await (new DAL.UserDataAccess(Context)).FindByLoginAndPasswordAsync(loginModel.Login, password);
+            string hashed = API.Services.HashPassword.Hash(loginModel.Password);
+            Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAndPasswordAsync(loginModel.Login, hashed);
             if (userFound == null) return Unauthorized();
-            if (!userFound.IsEnabled) return BadRequest("Account is disabled");
+            if (!userFound.IsEnabled) return BadRequest("Account is disabled.");
 
             JwtSecurityToken token = await CreateToken(userFound);
 
