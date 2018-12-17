@@ -56,8 +56,8 @@ namespace API
 
             #region Authentification
             Infrastructure.ConfigurationHelper helper = new Infrastructure.ConfigurationHelper();
-            string Issuer = helper.Get("Authentification:Issuer");
-            string Audience = helper.Get("Authentification:Audience");
+            string Issuer = helper.Get("Authentication:Issuer");
+            string Audience = helper.Get("Authentication:Audience");
 
             services.AddAuthorization(options =>
                 {
