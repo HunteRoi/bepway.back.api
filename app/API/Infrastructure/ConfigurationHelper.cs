@@ -6,10 +6,11 @@ namespace API.Infrastructure
 {
     public class ConfigurationHelper
     {
-        private readonly string _configFileName = "secrets.json";
+        private readonly string _configFileName;
         private readonly IConfiguration _config;
-        public ConfigurationHelper()
+        public ConfigurationHelper(string fileName)
         {
+            _configFileName = fileName;
             string expectedConfigurationFilePath = Path.Combine(Directory.GetCurrentDirectory(), _configFileName);
             if (!File.Exists(expectedConfigurationFilePath))
             {

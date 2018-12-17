@@ -55,7 +55,7 @@ namespace API
             #endregion
 
             #region Authentification
-            Infrastructure.ConfigurationHelper helper = new Infrastructure.ConfigurationHelper();
+            Infrastructure.ConfigurationHelper helper = new Infrastructure.ConfigurationHelper("secrets.json");
             string Issuer = helper.Get("Authentication:Issuer");
             string Audience = helper.Get("Authentication:Audience");
 
