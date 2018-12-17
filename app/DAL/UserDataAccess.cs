@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Model;
+using AutoMapper;
 
 namespace DAL
 {
@@ -34,10 +35,13 @@ namespace DAL
             Context.User.Add(data);
             await Context.SaveChangesAsync();
         }
-        // public override async Task<User> EditAsync (User data)
-        // {
-
-        // }
+        public override async Task<User> EditAsync (User data, IMapper mapper)
+        {
+            User target = await FindByIdAsync(data.Id);
+            mapper.Map(data,target);
+            await Context.SaveChangesAsync();
+            return target;
+        }
         protected override async Task DeleteAsync (User data) 
         {
             Context.User.Remove(data);

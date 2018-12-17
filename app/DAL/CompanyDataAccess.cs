@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Model;
+using AutoMapper;
 
 namespace DAL
 {
@@ -20,7 +21,7 @@ namespace DAL
         // {}
         // public abstract Task<Company> DeleteByIdAsync (int id)
         // {}
-        // public abstract Task<Company> EditAsync (Company data);
+        // public abstract Task<Company> EditAsync (Company data, IMapper mapper);
         // {}
     }
 }
