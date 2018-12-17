@@ -22,6 +22,13 @@ namespace DAL
                 .ToArrayAsync();
             return users;
         }
+
+        public async Task<User> FindByLoginAndPasswordAsync (string login, string password)
+        {
+            User entity = await FindByLoginAsync(login);
+            return (entity != null && entity.Password == password) ? entity : null;
+        }
+
         public override async Task<User> FindByIdAsync (int id) 
         {
             User entity = await Context.User.FindAsync(id);

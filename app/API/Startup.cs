@@ -106,7 +106,7 @@ namespace API
             #endregion
 
             services
-                .AddMvc(options => options.Filters.Add(typeof(BusinessExceptionFilter)))
+                .AddMvc(options => options.Filters.Add(typeof(Services.BusinessExceptionFilter)))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

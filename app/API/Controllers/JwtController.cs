@@ -13,26 +13,22 @@ namespace API.Controllers
 {
     [AllowAnonymous]
     [Route("api/jwt")]
-    public class JwtController : ControllerBase
+    public class JwtController : APIController
     {
         private readonly JwtIssuerOptions _jwtOptions;
 
-        public JwtController(IOptions<JwtIssuerOptions> jwtOptions) 
+        public JwtController(IOptions<JwtIssuerOptions> jwtOptions, DAL.BepwayContext context) 
         {
+            Context = context;
             _jwtOptions = jwtOptions.Value;
         }
 
         [HttpPost]
         public async Task<IActionResult> Login ([FromBody] DTO.LoginModel loginModel)
         {
-            if (/*loginModel == null || */!ModelState.IsValid) return BadRequest(ModelState);
-
-            // to externalize as DAL method returning null if user doesn't exist
-            var repository = new DAL.AuthentificationRepository();
-            Model.User userFound = repository.GetUsers().FirstOrDefault(user => 
-                user.Login == loginModel.Login && user.Password == loginModel.Password
-            );
-            //
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            string password = /*encrypt*/ loginModel.Password;
+            Model.User userFound = await (new DAL.UserDataAccess(Context)).FindByLoginAndPasswordAsync(loginModel.Login, password);
             if (userFound == null) return Unauthorized();
             if (!userFound.IsEnabled) return BadRequest("Account is disabled");
 

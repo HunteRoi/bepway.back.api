@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace API.Infrastructure
+namespace API.Services
 {
     public class BusinessExceptionFilter : IExceptionFilter
     {
