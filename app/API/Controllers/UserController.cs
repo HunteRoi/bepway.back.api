@@ -51,6 +51,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post ([FromBody] DTO.SigninModel user)
         {
+            
             if (!ModelState.IsValid) return BadRequest(ModelState);
             Model.User entity = Mapper.Map<Model.User>(user);
             
