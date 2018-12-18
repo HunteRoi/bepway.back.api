@@ -20,6 +20,7 @@ namespace API.Controllers
             dataAccess = new UserDataAccess(Context);
         }
 
+        [Authorize(Roles = Model.Constants.Roles.ADMIN+","+Model.Constants.Roles.GESTIONNARY)]
         [HttpGet]
         public async Task<IActionResult> Get (int? pageIndex = 0, int? pageSize = 5, string userName = null)
         {
@@ -27,6 +28,7 @@ namespace API.Controllers
             return Ok(entities.Select(Mapper.Map<DTO.User>));
         }
 
+        [Authorize(Roles = Model.Constants.Roles.ADMIN+","+Model.Constants.Roles.GESTIONNARY)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById (int id) 
         {
@@ -35,6 +37,7 @@ namespace API.Controllers
             return Ok(Mapper.Map<DTO.User>(entity));
         }
 
+        [Authorize(Roles = Model.Constants.Roles.ADMIN+","+Model.Constants.Roles.GESTIONNARY)]
         [HttpGet("{login}")]
         public async Task<IActionResult> GetByLogin (string login) 
         {
@@ -43,18 +46,22 @@ namespace API.Controllers
             return Ok(Mapper.Map<DTO.User>(entity));
         }
 
+        [AllowAnonymous]
         [HttpPost]
-        [Authorize(Roles = Model.Constants.Roles.ADMIN)]
-        public async Task<IActionResult> Post ([FromBody] DTO.User user)
+        public async Task<IActionResult> Post ([FromBody] DTO.SigninModel user)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             Model.User entity = Mapper.Map<Model.User>(user);
-            await dataAccess.AddAsync(entity);
+            
+            (string hashed, string salt) = await API.Services.HashPassword.HashAsync(user.Password);
+            entity.Password = $"{hashed}.{salt}";
+
+            entity = await dataAccess.AddAsync(entity);
             return Created($"api/Shops/{entity.Id}", Mapper.Map<DTO.User>(entity));
         }
 
-        [HttpPut("{id}")]
         [Authorize(Roles = Model.Constants.Roles.ADMIN)]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Put (int id, [FromBody] DTO.User user)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -65,8 +72,20 @@ namespace API.Controllers
             return Accepted(Mapper.Map<DTO.User>(entity));
         }
 
-        [HttpDelete("{id}")]
+        [Authorize(Roles = Model.Constants.Roles.GESTIONNARY)]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put (int id, [FromBody] string todoList)
+        {
+            if (string.IsNullOrEmpty(todoList)) return BadRequest();
+            Model.User entity = await dataAccess.FindByIdAsync(id);
+            if (entity == null) return NotFound();
+            entity.TodoList = todoList;
+            await Context.SaveChangesAsync();
+            return Accepted(Mapper.Map<DTO.User>(entity));
+        }
+
         [Authorize(Roles = Model.Constants.Roles.ADMIN)]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete (int id)
         {
             Model.User entity = await dataAccess.FindByIdAsync(id);

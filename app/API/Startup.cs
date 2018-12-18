@@ -14,6 +14,7 @@ using API.Infrastructure;
 using DAL;
 using AutoMapper;
 using Swashbuckle.AspNetCore.Swagger;
+using API.Services;
 
 /*
 using System.Collections.Generic;
@@ -39,9 +40,11 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigurationHelper helper = new ConfigurationHelper("secrets.json");
+
             #region DB process
             services.AddDbContext<BepwayContext>(options => {
-                string connectionString = new ConnectionHelper("BepWayConnectionString").GetConnectionString();
+                string connectionString = helper.Get("BepWayConnectionString");
                 options.UseSqlServer(connectionString);
             }); // externalisation de la connectionString dans appsettings.json
             #endregion
@@ -55,7 +58,6 @@ namespace API
             #endregion
 
             #region Authentification
-            Infrastructure.ConfigurationHelper helper = new Infrastructure.ConfigurationHelper("secrets.json");
             string Issuer = helper.Get("Authentication:Issuer");
             string Audience = helper.Get("Authentication:Audience");
 
@@ -106,7 +108,7 @@ namespace API
             #endregion
 
             services
-                .AddMvc(options => options.Filters.Add(typeof(Services.BusinessExceptionFilter)))
+                .AddMvc(options => options.Filters.Add(typeof(BusinessExceptionFilter)))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

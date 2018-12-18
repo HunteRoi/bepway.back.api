@@ -28,13 +28,16 @@ namespace API.Controllers
         public async Task<IActionResult> Login ([FromBody] DTO.LoginModel loginModel)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            string hashed = API.Services.HashPassword.Hash(loginModel.Password);
-            Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAndPasswordAsync(loginModel.Login, hashed);
-            if (userFound == null) return Unauthorized();
-            if (!userFound.IsEnabled) return BadRequest("Account is disabled.");
+            Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAsync(loginModel.Login);          
+            if (userFound == null || !userFound.IsEnabled) return Unauthorized();
+
+            List<string> data = userFound.Password.Split('.').ToList();
+            string hashedCheck = data.ElementAt(0);
+            string salt = data.ElementAt(1);
+            string hashedToVerify = (await API.Services.HashPassword.HashAsync(loginModel.Password, salt)).hashed;
+            if (!hashedToVerify.Equals(hashedCheck)) return Unauthorized();
 
             JwtSecurityToken token = await CreateToken(userFound);
-
             return Ok(
                 new {
                     access_token = new JwtSecurityTokenHandler().WriteToken(token),

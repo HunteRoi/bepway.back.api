@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 
-namespace API.Infrastructure
+namespace API.Services
 {
     public class ConfigurationHelper
     {
@@ -14,7 +14,7 @@ namespace API.Infrastructure
             string expectedConfigurationFilePath = Path.Combine(Directory.GetCurrentDirectory(), _configFileName);
             if (!File.Exists(expectedConfigurationFilePath))
             {
-                throw new FileNotFoundException($"Le fichier de configuration secrète n'a pas pu être trouvé. Il doit s'agir d'un fichier json nommé {_configFileName} contenant les informations sensibles.", expectedConfigurationFilePath);
+                throw new FileNotFoundException($"The file of secret configuration couldn't be found. It must be a JSON file named {_configFileName} containing sensitive data.", expectedConfigurationFilePath);
             }
 
             _config = new ConfigurationBuilder()
@@ -28,7 +28,7 @@ namespace API.Infrastructure
             string value = _config.GetValue<string>(key);
             if (String.IsNullOrEmpty(value))
             {
-                throw new InvalidOperationException($"Le fichier de configuration ne contient pas de clé nommée {key}.");
+                throw new InvalidOperationException($"The file doesn't have a key-value pair registered as {key}.");
             }
             return value;
         }

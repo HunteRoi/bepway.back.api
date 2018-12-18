@@ -3,20 +3,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DTO
 {
-    public class User
+    public class SigninModel
     {
-        public int Id { get; set; }
         [Required]
         public string Login { get; set; }
+        [Required]
         public string Password { get; set; }
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
+        [Required]
         public DateTime Birthdate { get; set; }
-        public string Roles { get; set; }
+        public string Roles => null;
         public bool IsEnabled { get; set; }
-        [StringLength(1000)]
-        public string TodoList { get; set; }
         public byte[] RowVersion { get; set; }
-        public DTO.User Creator { get; set; }
     }
 }

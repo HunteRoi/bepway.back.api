@@ -12,7 +12,7 @@ namespace DAL
         
         public abstract Task<IEnumerable<T>> GetAllAsync (int? pageIndex = 0, int? pageSize = 15, string name = null);
         public abstract Task<T> FindByIdAsync (int id);
-        public abstract Task AddAsync (T data);
+        public abstract Task<T> AddAsync (T data);
         public abstract Task DeleteAsync (T data);
     }
 }

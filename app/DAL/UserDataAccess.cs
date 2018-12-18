@@ -23,12 +23,6 @@ namespace DAL
             return users;
         }
 
-        public async Task<User> FindByLoginAndPasswordAsync (string login, string password)
-        {
-            User entity = await FindByLoginAsync(login);
-            return (entity != null && entity.Password == password) ? entity : null;
-        }
-
         public override async Task<User> FindByIdAsync (int id) 
         {
             User entity = await Context.User.FindAsync(id);
@@ -39,10 +33,12 @@ namespace DAL
             User entity = await Context.User.FirstOrDefaultAsync(user => user.Login.Contains(login));
             return entity;
         }
-        public override async Task AddAsync (User data) 
+        public override async Task<User> AddAsync (User data) 
         {
             Context.User.Add(data);
             await Context.SaveChangesAsync();
+            User entity = await FindByLoginAsync(data.Login);
+            return entity;
         }
         public override async Task DeleteAsync (User data) 
         {
