@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,12 +14,12 @@ namespace DAL
             Context = context;
         }
 
-        public override async Task<IEnumerable<User>> GetAllAsync (int? pageIndex = 0, int? pageSize = 5, string userName = null)
+        public override async Task<IEnumerable<User>> GetAllAsync (int? pageIndex = 0, int? pageSize = 5, String userName = null)
         {
             IEnumerable<User> users = await Context.User
                 .Where(user => userName == null || user.Login.Contains(userName))
                 .OrderBy(user => user.Id)
-                .TakePage(pageIndex, pageSize)
+                .TakePage(pageIndex.Value, pageSize.Value)
                 .ToArrayAsync();
             return users;
         }

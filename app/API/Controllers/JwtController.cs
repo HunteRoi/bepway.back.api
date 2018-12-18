@@ -14,6 +14,7 @@ namespace API.Controllers
 {
     [AllowAnonymous]
     [Route("api/jwt")]
+    [Produces("application/json")]
     public class JwtController : APIController
     {
         private readonly JwtIssuerOptions _jwtOptions;
@@ -25,6 +26,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(200)]
         public async Task<IActionResult> Login ([FromBody] DTO.LoginModel loginModel)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

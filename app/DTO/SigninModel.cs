@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DTO
@@ -7,15 +8,23 @@ namespace DTO
     {
         [Required]
         public string Login { get; set; }
+
         [Required]
         public string Password { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
         [Required]
         public DateTime Birthdate { get; set; }
-        public string Roles => null;
+
+        [DefaultValue(null)]
+        public string Roles {get; set; }
+
+        [DefaultValue(true)]
         public bool IsEnabled { get; set; }
+        
         public byte[] RowVersion { get; set; }
     }
 }

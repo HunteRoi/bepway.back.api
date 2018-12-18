@@ -10,8 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     [Route("api/[controller]")]
+    [Produces("application/json")]
     public class ValuesController : APIController
     {
         // GET api/values

@@ -30,13 +30,13 @@ namespace API.Services
                         numBytesRequested: 256/8
                     )
                 );
-                Console.Write($"\tReal: {password}\n\tSalt: {Convert.ToBase64String(salt)}\n\tHashed: {hashed}\n\tTogether: {password+'.'+Convert.ToBase64String(salt)}\n\n");
+                //Console.Write($"\tReal: {password}\n\tSalt: {Convert.ToBase64String(salt)}\n\tHashed: {hashed}\n\tTogether: {password+'.'+Convert.ToBase64String(salt)}\n\n");
                 return (hashed, Convert.ToBase64String(salt));
         }
 
-        public static async Task<(string hashed, string salt)> HashAsync (string password, string saltData = null)
+        public static Task<(string hashed, string salt)> HashAsync (string password, string saltData = null)
         {
-            return await Task.Run(() => Hash(password, saltData));
+            return Task.Run(() => Hash(password, saltData));
         }
     }
 }
