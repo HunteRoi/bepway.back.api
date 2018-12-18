@@ -22,12 +22,12 @@ CREATE TABLE [dbo].[User] (
 	[roles] NVARCHAR(500) NOT NULL,
 	[isEnabled] BIT NOT NULL,
 	[todoList] NVARCHAR(500),
-	[creator_id] NVARCHAR(50),
+	[creator_id] INT,
 	[rowVersion] TIMESTAMP,
 
 	CONSTRAINT user_pk PRIMARY KEY ([id]),
 	CONSTRAINT user_uk UNIQUE ([login]),
-	CONSTRAINT userCreator_fk FOREIGN KEY ([creator_id]) REFERENCES [dbo].[User] ([login])
+	CONSTRAINT userCreator_fk FOREIGN KEY ([creator_id]) REFERENCES [dbo].[User] ([id])
 );
 
 CREATE TABLE [dbo].[Company]

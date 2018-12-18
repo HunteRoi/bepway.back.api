@@ -1,15 +1,13 @@
 -- missing hashed passwords
 
-DELETE FROM [dbo].[User] WHERE [id] = 0;
-DELETE FROM [dbo].[User] WHERE [id] = 1;
-DELETE FROM [dbo].[User] WHERE [id] = 2;
+--TRUNCATE TABLE [dbo].[User];
 
 INSERT 
 	INTO [dbo].[User] 
 	([login], [password], [email], [birthDate], [roles], [isEnabled])
 	VALUES (
 		'hunteroi',
-		'hdGMt7sL2z+OcavhqsXoQ1l50BJLmVqXjUC8no1fXqY=',
+		'JfSNVtDAMFSUtYxHBVbAPb/CoTUUMveRrXP1umpjyqo=.NBkSxy9rUR1kiq2pucANXA==',
 		'hunteroi@bep.be',
 		'19990321',
 		'Admin',
@@ -19,26 +17,28 @@ INSERT
 
 INSERT
 	INTO [dbo].[User]
-	([login], [password], [email], [birthDate], [roles], [isEnabled])
+	([login], [password], [email], [birthDate], [roles], [isEnabled], [creator_id])
 	VALUES (
 		'imnoot',
-		'NDZMQ70MmY+Oy1doM0GMiaC0NF4i1+KhQbmA8mNarTE=',
+		'cA2rOJvY6XgviX1tzAoz0hQz+l49Png9Zc8iT6kqGIU=.p0dxYVxs7mz89AhuSlFxgg==',
 		'imnoot@bep.be',
 		'19980917',
 		'Gestionnary',
-		1
+		1,
+		(SELECT [id] FROM [dbo].[User] WHERE [login] = 'hunteroi')
 	);
 --NootNoot
 
 INSERT
 	INTO [dbo].[User]
-	([login], [password], [email], [birthDate], [roles], [isEnabled])
+	([login], [password], [email], [birthDate], [roles], [isEnabled], [creator_id])
 	VALUES (
 		'schsa',
-		'Az6REuYtQtEpu68eqys5X6vjMBvCN7NaqjULl2mO5fM=',
+		'7fhnBBKfPcZjFUNgQTFsSCpwJt5+y5MkdFt5lV1IOXA=.lpsYHvPscFWqh+/YD/ATRg==',
 		'samuel.scholtes@bep.be',
 		'19840101',
 		'User',
-		0
+		0,
+		(SELECT [id] FROM [dbo].[User] WHERE [login] = 'hunteroi')
 	);
 --schsa
