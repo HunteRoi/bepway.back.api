@@ -26,7 +26,7 @@ namespace DTO
         [Required]
         public DateTime CreationDate { get; set; }
         public byte[] RowVersion { get; set; }
-        public DTO.ActivitySector ActivitySector { get; set; }
-        public DTO.User Creator { get; set; }
+        public ActivitySector ActivitySector { get; set; }
+        public User Creator { get; set; }
     }
 }

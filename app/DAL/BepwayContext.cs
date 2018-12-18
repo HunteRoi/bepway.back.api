@@ -20,7 +20,7 @@ namespace DAL
         public virtual DbSet<ActivitySector> ActivitySector { get; set; }
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<User> User { get; set; }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
@@ -122,9 +122,7 @@ namespace DAL
                     .HasColumnName("birthDate")
                     .HasColumnType("date");
 
-                entity.Property(e => e.CreatorId)
-                    .HasColumnName("creator_id")
-                    .HasMaxLength(50);
+                entity.Property(e => e.CreatorId).HasColumnName("creator_id");
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -159,7 +157,6 @@ namespace DAL
 
                 entity.HasOne(d => d.Creator)
                     .WithMany(p => p.InverseCreator)
-                    .HasPrincipalKey(p => p.Login)
                     .HasForeignKey(d => d.CreatorId)
                     .HasConstraintName("userCreator_fk");
             });

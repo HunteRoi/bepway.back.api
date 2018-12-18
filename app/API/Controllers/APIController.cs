@@ -15,6 +15,6 @@ namespace API.Controllers
             set => context = value ?? throw new ArgumentNullException(nameof(value));
         }
         public IMapper Mapper { get; set ;}
-        //public ILogger Logger { get; set; }
+        public ILogger Logger { get; set; }
     }
 }

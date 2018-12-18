@@ -5,10 +5,10 @@ namespace DTO
 {
     public class User
     {
+        [Required]
         public int Id { get; set; }
         [Required]
         public string Login { get; set; }
-        public string Password { get; set; }
         [EmailAddress]
         public string Email { get; set; }
         public DateTime Birthdate { get; set; }
@@ -17,6 +17,6 @@ namespace DTO
         [StringLength(1000)]
         public string TodoList { get; set; }
         public byte[] RowVersion { get; set; }
-        public DTO.User Creator { get; set; }
+        public User Creator { get; set; }
     }
 }

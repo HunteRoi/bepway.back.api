@@ -8,8 +8,7 @@ namespace API.Infrastructure
     {
         public MappingProfile()
         {
-            CreateMap<Model.User, DTO.User>()
-                .ForMember(user => user.Password, opt => opt.Ignore());
+            CreateMap<Model.User, DTO.User>();
             CreateMap<DTO.User, Model.User>()
                 .ForMember(user => user.Id, opt => opt.Ignore())
                 .ForMember(user => user.Roles, opt => opt.Ignore());
