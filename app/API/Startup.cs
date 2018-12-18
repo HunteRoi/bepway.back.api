@@ -127,8 +127,9 @@ namespace API
             #region Swagger/OpenAPI
             app.UseSwagger();
             app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BepWay API v1");
-                c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BepWay API - v1.0.0");
+                c.RoutePrefix = String.Empty;
+                c.DocumentTitle = "BepWay API - Docs";
             });
             #endregion
             
