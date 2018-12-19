@@ -13,6 +13,6 @@ namespace API.Controllers
         public CompanyController (BepwayContext context) 
         {
             Context = context;
-        }   
+        }
     }
 }
