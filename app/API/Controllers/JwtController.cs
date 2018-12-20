@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Annotations;
 using API.Infrastructure;
 using DAL;
+
 
 namespace API.Controllers
 {
     [AllowAnonymous]
     [Route("api/jwt")]
     [Produces("application/json")]
+    [Consumes("application/json")]
+    //[SwaggerTag()]
     public class JwtController : APIController
     {
         private readonly JwtIssuerOptions _jwtOptions;
@@ -26,9 +30,13 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(200)]
+        [SwaggerOperation(
+            Summary = "Requests a token",
+            Description = "Returns an access token and its expiration time in seconds"
+        )]
+        [SwaggerResponse(200, "Returns a token object", typeof(DTO.Token))]
+        [SwaggerResponse(400, "If the body does not validate the requirements")]
+        [SwaggerResponse(401, "If the user does not exist or the user account is disabled")]
         public async Task<IActionResult> Login ([FromBody] DTO.LoginModel loginModel)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -43,7 +51,7 @@ namespace API.Controllers
 
             JwtSecurityToken token = await CreateToken(userFound);
             return Ok(
-                new {
+                new DTO.Token {
                     access_token = new JwtSecurityTokenHandler().WriteToken(token),
                     expires_in = (int)_jwtOptions.ValidFor.TotalSeconds 
                 }

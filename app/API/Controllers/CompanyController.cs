@@ -8,6 +8,7 @@ namespace API.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[Controller]")]
     [Produces("application/json")]
+    [Consumes("application/json")]
     public class CompanyController : APIController
     {
         public CompanyController (BepwayContext context) 

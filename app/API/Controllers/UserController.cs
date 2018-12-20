@@ -14,6 +14,7 @@ namespace API.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[Controller]")]
     [Produces("application/json")]
+    [Consumes("application/json")]
     public class UserController : APIController
     {
         private readonly UserDataAccess dataAccess;
@@ -25,7 +26,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN+","+Model.Constants.Roles.GESTIONNARY)]
         [HttpGet]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(IEnumerable<DTO.User>), 200)]
         public async Task<IActionResult> Get (int? pageIndex = 0, int? pageSize = 5, String userName = null)
         {
             IEnumerable<Model.User> entities = await dataAccess.GetAllAsync(pageIndex.Value, pageSize.Value, userName);
@@ -34,7 +35,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN+","+Model.Constants.Roles.GESTIONNARY)]
         [HttpGet("{id:int}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(DTO.User), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetById (int id) 
         {
@@ -46,7 +47,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN+","+Model.Constants.Roles.GESTIONNARY)]
         [HttpGet("{login}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(DTO.User), 200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetByLogin (string login) 
         {
@@ -56,7 +57,7 @@ namespace API.Controllers
             return Ok(Mapper.Map<DTO.User>(entity));
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = Model.Constants.Roles.ADMIN)]
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
@@ -73,7 +74,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN)]
         [HttpPut("{id:int}")]
-        [ProducesResponseType(202)]
+        [ProducesResponseType(typeof(DTO.User), 202)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Put (int id, [FromBody] DTO.User user)
@@ -90,7 +91,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN)]
         [HttpDelete("{id:int}")]
-        [ProducesResponseType(202)]
+        [ProducesResponseType(typeof(DTO.User), 202)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Delete (int id)
         {

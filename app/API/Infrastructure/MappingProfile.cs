@@ -26,8 +26,6 @@ namespace API.Infrastructure
             CreateMap<Model.ActivitySector, DTO.ActivitySector>();
             CreateMap<DTO.ActivitySector, Model.ActivitySector>()
                 .ForMember(sector => sector.Id, opt => opt.Ignore());
-
-            //CreateMap<Model.User, DTO.User>().ReverseMap();
         }
     }
 }
