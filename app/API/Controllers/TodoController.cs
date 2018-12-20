@@ -10,6 +10,7 @@ namespace API.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[Controller]")]
     [Produces("application/json")]
+    [Consumes("application/json")]
     public class TodoController : APIController
     {
         private readonly UserDataAccess dataAccess;

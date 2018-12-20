@@ -1,29 +1,20 @@
 ﻿using System;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using API.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+
+using API.Services;
 using DAL;
 using AutoMapper;
-using Swashbuckle.AspNetCore.Swagger;
-using API.Services;
-
-/*
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.Extensions.Logging;
-using Model;
-*/
+using API.Infrastructure;
+using Newtonsoft.Json;
 
 [assembly: ApiController]
 namespace API
@@ -46,15 +37,11 @@ namespace API
             services.AddDbContext<BepwayContext>(options => {
                 string connectionString = helper.Get("BepWayConnectionString");
                 options.UseSqlServer(connectionString);
-            }); // externalisation de la connectionString dans appsettings.json
+            });
             #endregion
 
             #region Swagger/OpenAPI
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "BepWay API", Version = "v1" });
-            }
-            ); // utilisation de Swagger/OpenAPI avec Swashbuckle*/
+            services.AddSwaggerDocumentation();
             #endregion
 
             #region Authentification
@@ -108,7 +95,11 @@ namespace API
             #endregion
 
             services
-                .AddMvc(options => options.Filters.Add(typeof(BusinessExceptionFilter)))
+                .AddMvc(options => 
+                {
+                    options.Filters.Add(typeof(BusinessExceptionFilter));
+                })
+                .AddJsonOptions(options => options.SerializerSettings.Formatting = Formatting.Indented)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -125,12 +116,7 @@ namespace API
             }
 
             #region Swagger/OpenAPI
-            app.UseSwagger();
-            app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BepWay API - v1");
-                c.RoutePrefix = String.Empty;
-                c.DocumentTitle = "BepWay API - Docs";
-            });
+            app.UseSwaggerDocumentation();
             #endregion
             
             app.UseHttpsRedirection();
