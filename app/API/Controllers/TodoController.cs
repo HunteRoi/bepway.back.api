@@ -21,7 +21,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN+","+Model.Constants.Roles.GESTIONNARY)]
-        [HttpPut("{id:int}/todo")]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(202)]
         [ProducesResponseType(typeof(DTO.BusinessError),400)]
         [ProducesResponseType(404)]

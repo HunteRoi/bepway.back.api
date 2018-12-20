@@ -13,10 +13,8 @@ namespace API.Infrastructure
             CreateMap<Model.User, DTO.User>();
             CreateMap<DTO.User, Model.User>()
                 .ForMember(user => user.Id, opt => opt.Ignore())
-                .ForMember(user => user.Password, opt => opt.Ignore())
-                .ForMember(user => user.Roles, opt => opt.NullSubstitute(Model.Constants.Roles.USER));
-            CreateMap<DTO.SigninModel, Model.User>()
-                .ForMember(user => user.Roles, opt => opt.NullSubstitute(Model.Constants.Roles.USER));
+                .ForMember(user => user.Password, opt => opt.Ignore());
+            CreateMap<DTO.SigninModel, Model.User>();
 
             CreateMap<Model.Company, DTO.Company>();
             CreateMap<DTO.Company, Model.Company>()

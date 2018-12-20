@@ -9,7 +9,6 @@ namespace Model
             public const string ADMIN = "Admin";
             public const string GESTIONNARY = "Gestionnary";
             public const string PREMIUM = "Premium";
-            public const string USER = "User";
             
         }
 

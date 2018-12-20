@@ -41,7 +41,6 @@ namespace API.Services
 
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
                 c.IncludeXmlComments(xmlPath);
-
                 c.EnableAnnotations();
             }
             );
