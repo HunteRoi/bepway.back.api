@@ -40,12 +40,7 @@ namespace API.Controllers
         public async Task<IActionResult> Login([FromBody] DTO.LoginModel loginModel)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAsync(loginModel.Login);
-            if (userFound == null || !userFound.IsEnabled) return NotFound();
-        [SwaggerResponse(404, "If the user does not exist or the account is disabled")]
-        public async Task<IActionResult> Login([FromBody] DTO.LoginModel loginModel)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            
             Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAsync(loginModel.Login);
             if (userFound == null || !userFound.IsEnabled) return NotFound();
 
@@ -53,8 +48,10 @@ namespace API.Controllers
             string hashedCheck = data.ElementAt(0);
             string salt = data.ElementAt(1);
             string hashedToVerify = (await API.Services.HashPassword.HashAsync(loginModel.Password, salt)).hashed;
-            if (!isEnabledAndPasswordsMatch(userFound, hashedToVerify, hashedCheck)) return BadRequest(new DTO.BusinessError { Message = "The login or password is wrong" });
-
+            if (!isEnabledAndPasswordsMatch(userFound, hashedToVerify, hashedCheck)) 
+            {
+                return BadRequest(new DTO.BusinessError { Message = "The login or password is wrong" });
+            }
 
             JwtSecurityToken token = await CreateToken(userFound);
             return Ok(
