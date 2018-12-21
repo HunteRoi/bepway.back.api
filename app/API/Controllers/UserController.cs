@@ -15,7 +15,6 @@ namespace API.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[Controller]")]
     [Produces("application/json")]
-    [Consumes("application/json")]
     public class UserController : APIController
     {
         private readonly UserDataAccess dataAccess;
@@ -60,6 +59,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN)]
         [HttpPost]
+        [Consumes("application/json")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> Post ([FromBody] DTO.SigninModel user)
@@ -75,6 +75,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN)]
         [HttpPut("{id:int}")]
+        [Consumes("application/json")]
         [ProducesResponseType(typeof(DTO.User), 202)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
