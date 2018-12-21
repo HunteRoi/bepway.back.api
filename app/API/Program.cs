@@ -20,23 +20,22 @@ namespace API {
 
         static HttpClient Client = new HttpClient ();
         static async Task RunAsync () {
-            Client.BaseAddress = new Uri ("http://data.bep.be");
             Client.DefaultRequestHeaders.Accept.Clear ();
             Client.DefaultRequestHeaders.Accept.Add (
                 new MediaTypeWithQualityHeaderValue ("application/json")
             );
-            await GetTaskAsync ("api/records/1.0search/?dataset=societes-de-nos-parcs-dactivite&rows=100&refine.nomparc=Parc+d%27activité+économique+de+Ciney+-+Biron+-+Lienne");
+            await GetTaskAsync (new Uri("http://data.bep.be/api/records/1.0search/?dataset=societes-de-nos-parcs-dactivite&rows=100&refine.nomparc=Parc+d%27activité+économique+de+Ciney+-+Biron+-+Lienne"));
         }
-        static async Task GetTaskAsync (string path) {
+        static async Task GetTaskAsync (Uri uri) {
             try {
-                HttpResponseMessage response = await Client.GetAsync (path);
-                Console.WriteLine (response.ToString ());
-                if (response.IsSuccessStatusCode) {
+                var response = await Client.GetStringAsync(uri);
+                Console.WriteLine (response);
+                /*if (response.IsSuccessStatusCode) {
                     var records = await response.Content.ReadAsAsync<Model.Dataset> ();
                     Console.WriteLine (records.nhits);
                 } else {
                     Console.WriteLine ($"berk nope --> {response.StatusCode}");
-                }
+                }*/
             } catch (Exception e) {
                 Console.WriteLine (e.Message);
             }

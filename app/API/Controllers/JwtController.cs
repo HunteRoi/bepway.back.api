@@ -17,19 +17,18 @@ namespace API.Controllers
     [AllowAnonymous]
     [Route("api/jwt")]
     [Produces("application/json")]
-    [Consumes("application/json")]
-    //[SwaggerTag()]
     public class JwtController : APIController
     {
         private readonly JwtIssuerOptions _jwtOptions;
 
-        public JwtController(IOptions<JwtIssuerOptions> jwtOptions, BepwayContext context) 
+        public JwtController(IOptions<JwtIssuerOptions> jwtOptions, BepwayContext context)
         {
             Context = context;
             _jwtOptions = jwtOptions.Value;
         }
 
         [HttpPost]
+        [Consumes("application/json")]
         [SwaggerOperation(
             Summary = "Requests a token",
             Description = "Returns an access token and its expiration time in seconds"
@@ -37,24 +36,32 @@ namespace API.Controllers
         [SwaggerResponse(200, "Returns a token object", typeof(DTO.Token))]
         [SwaggerResponse(400, "If the body does not validate the requirements")]
         [SwaggerResponse(401, "If the user account is disabled or the password does not match")]
-        [SwaggerResponse(404, "If the user is not found")]
-        public async Task<IActionResult> Login ([FromBody] DTO.LoginModel loginModel)
+        [SwaggerResponse(404, "If the user does not exist or the account is disabled")]
+        public async Task<IActionResult> Login([FromBody] DTO.LoginModel loginModel)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAsync(loginModel.Login);          
-            if (userFound == null) return NotFound();
+            Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAsync(loginModel.Login);
+            if (userFound == null || !userFound.IsEnabled) return NotFound();
+        [SwaggerResponse(404, "If the user does not exist or the account is disabled")]
+        public async Task<IActionResult> Login([FromBody] DTO.LoginModel loginModel)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAsync(loginModel.Login);
+            if (userFound == null || !userFound.IsEnabled) return NotFound();
 
             List<string> data = userFound.Password.Split('.').ToList();
             string hashedCheck = data.ElementAt(0);
             string salt = data.ElementAt(1);
             string hashedToVerify = (await API.Services.HashPassword.HashAsync(loginModel.Password, salt)).hashed;
-            if (!isEnabledAndPasswordsMatch(userFound, hashedToVerify, hashedCheck)) return Unauthorized();
+            if (!isEnabledAndPasswordsMatch(userFound, hashedToVerify, hashedCheck)) return BadRequest(new DTO.BusinessError { Message = "The login or password is wrong" });
+
 
             JwtSecurityToken token = await CreateToken(userFound);
             return Ok(
-                new DTO.Token {
+                new DTO.Token
+                {
                     access_token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expires_in = (int)_jwtOptions.ValidFor.TotalSeconds 
+                    expires_in = (int)_jwtOptions.ValidFor.TotalSeconds
                 }
             );
         }
@@ -71,13 +78,13 @@ namespace API.Controllers
                 new Claim(PrivateClaims.UserId,userFound.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, userFound.Login),
                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
-                new Claim(JwtRegisteredClaimNames.Iat, 
+                new Claim(JwtRegisteredClaimNames.Iat,
                     ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(),
                     ClaimValueTypes.Integer64
-                )    
+                )
             };
-            
-            if (!String.IsNullOrEmpty(userFound.Roles)) 
+
+            if (!String.IsNullOrEmpty(userFound.Roles))
             {
                 userFound.Roles.Split(' ').ToList().ForEach(roleName => claims.Add(new Claim(PrivateClaims.Roles, roleName)));
             }
@@ -92,7 +99,7 @@ namespace API.Controllers
             );
         }
 
-        private static long ToUnixEpochDate (DateTime date) 
-            => (long) Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970,1,1,0,0,0, TimeSpan.Zero)).TotalSeconds);
+        private static long ToUnixEpochDate(DateTime date)
+            => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
     }
 }
