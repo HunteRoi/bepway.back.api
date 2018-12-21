@@ -32,6 +32,10 @@ namespace API {
         public void ConfigureServices (IServiceCollection services) {
             ConfigurationHelper helper = new ConfigurationHelper ("secrets.json");
 
+            #region CORS config
+            services.AddCors();
+            #endregion
+
             #region DB process
             services.AddDbContext<BepwayContext> (options => {
                 string connectionString = helper.Get ("BepWayConnectionString");
@@ -105,6 +109,17 @@ namespace API {
             } else {
                 app.UseHsts ();
             }
+
+            #region CORS config
+            app.UseCors(builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                
+            });
+            #endregion
 
             #region Swagger/OpenAPI
             app.UseSwaggerDocumentation ();
