@@ -4,10 +4,9 @@ namespace Model
 {
     public class Dataset
     {
-        public int nhits { get; set; }
-        public Parameter parameter { get ; set; }
-        public List<Record> records { get; set ;}
-        public object face_groups { get; set; }
+        public int Nhits { get; set; }
+        public Parameter Parameter { get ; set; }
+        public List<Record> Records { get; set ;}
 
     }
 }

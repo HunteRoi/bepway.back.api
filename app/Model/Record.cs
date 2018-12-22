@@ -2,9 +2,9 @@ namespace Model
 {
     public class Record
     {
-        public string datasetid { get; set; }
-        public string recordi {get; set;}
-        public Field fields {get; set;}
-        public string record_timestamp { get; set; }
+        public string DatasetId { get; set; }
+        public string RecordId {get; set;}
+        public Field Fields {get; set;}
+        public string Record_timestamp { get; set; }
     }
 }

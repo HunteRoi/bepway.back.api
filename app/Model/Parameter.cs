@@ -4,10 +4,9 @@ namespace Model
 {
     public class Parameter
     {
-        public List<string> dataset {get; set;}
-        public List<string> refine {get; set;}
-        public string timezone {get; set;}
-        public int rows {get; set;}
-        public string format {get; set;}
+        public List<string> Dataset {get; set;}
+        public List<string> Refine {get; set;}
+        public string Timezone {get; set;}
+        public int Rows {get; set;}
     }
 }
