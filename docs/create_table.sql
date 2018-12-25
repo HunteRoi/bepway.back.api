@@ -30,6 +30,66 @@ CREATE TABLE [dbo].[User] (
 	CONSTRAINT userCreator_fk FOREIGN KEY ([creator_id]) REFERENCES [dbo].[User] ([id])
 );
 
+
+CREATE TABLE [dbo].[Coordinates]
+(
+	[id] INT IDENTITY(0,1),
+	[latitude] NVARCHAR(50) NOT NULL,
+	[longitude] NVARCHAR(50) NOT NULL,
+	
+	CONSTRAINT coordinates_pk PRIMARY KEY ([id])
+);
+
+CREATE TABLE [dbo].[Zoning]
+(
+	[id] INT IDENTITY(0,1),
+	[idOpenData] NVARCHAR(100) NOT NULL,
+	[name] NVARCHAR(200) NOT NULL,
+	[coordinates_id] INT NOT NULL,
+	
+	CONSTRAINT zoning_fk PRIMARY KEY ([id]),
+	CONSTRAINT zoning_uk UNIQUE ([name]),
+	CONSTRAINT zoning_openData_uk UNIQUE ([idOpenData]),
+	constraint zoningCoordinates_fk
+		FOREIGN KEY ([coordinates_id])
+		REFERENCES [dbo].[Coordinates] ([id])
+		ON DELETE CASCADE
+);
+
+CREATE TABLE [dbo].[Road]
+(
+	[id] INT IDENTITY(0,1),
+	[zoning_id] INT NOT NULL,
+	
+	CONSTRAINT road_pk PRIMARY KEY ([id]),
+	constraint roadZoning_fk
+		FOREIGN KEY ([zoning_id])
+		REFERENCES [dbo].[Zoning] ([id])
+);
+
+CREATE TABLE [dbo].[RoadCoordinates]
+(
+	[id] INT IDENTITY(0,1),
+	[zoning_id] INT NOT NULL,
+	[coordinates_id] INT NOT NULL,
+	
+	CONSTRAINT roadCoordinates_pk PRIMARY KEY ([id]),
+	constraint roadCoordinatesZoning_fk
+		FOREIGN KEY ([zoning_id])
+		REFERENCES [dbo].[Zoning] ([id]),
+	constraint roadCoordinatesCoords_fk
+		FOREIGN KEY ([coordinates_id])
+		REFERENCES [dbo].[Coordinates] ([id])
+		ON DELETE CASCADE
+);
+
+CREATE TABLE [dbo].[Intersection]
+(
+	[id] INT IDENTITY(0,1),
+	
+	CONSTRAINT interseciton_pk PRIMARY KEY ([id])
+);
+
 CREATE TABLE [dbo].[Company]
 (
 	[id] INT IDENTITY(0,1),
@@ -40,15 +100,15 @@ CREATE TABLE [dbo].[Company]
 	[description] NVARCHAR(500),
 	[status] NVARCHAR(50) NOT NULL, -- "Draft", "Existing", "Expired"
 	[address] NVARCHAR(200) NOT NULL,
-	[latitude] NUMERIC NOT NULL,
-	[longitude] NUMERIC NOT NULL,
 	[creationDate] DATE NOT NULL,
 	[activitySector_id] INT,
 	[creator_id] NVARCHAR(50),
+	[coordinates_id] INT NOT NULL,
 	[isPremium] BIT NOT NULL,
 	[rowVersion] TIMESTAMP,
 
 	CONSTRAINT company_pk PRIMARY KEY ([id]),
+	CONSTRAINT company_uk UNIQUE ([idOpenData]),
 	CONSTRAINT activitySector_fk 
 		FOREIGN KEY ([activitySector_id]) 
 		REFERENCES [dbo].[ActivitySector] ([id]) 
@@ -56,5 +116,9 @@ CREATE TABLE [dbo].[Company]
 	CONSTRAINT companyCreator_fk
 		FOREIGN KEY ([creator_id])
 		REFERENCES [dbo].[User] ([login])
-		ON DELETE SET NULL
+		ON DELETE SET NULL,
+	constraint companyCoordinates_fk
+		FOREIGN KEY ([coordinates_id])
+		REFERENCES [dbo].[Coordinates] ([id])
+		ON DELETE CASCADE
 );

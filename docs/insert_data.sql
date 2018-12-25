@@ -33,7 +33,7 @@ INSERT
 	INTO [dbo].[User]
 	([login], [password], [email], [birthDate], [roles], [isEnabled], [creator_id])
 	VALUES (
-		'schsa',
+		'mdpschsa',
 		'7fhnBBKfPcZjFUNgQTFsSCpwJt5+y5MkdFt5lV1IOXA=.lpsYHvPscFWqh+/YD/ATRg==',
 		'samuel.scholtes@bep.be',
 		'19840101',

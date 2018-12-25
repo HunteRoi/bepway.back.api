@@ -69,6 +69,7 @@ namespace API.Controllers
             Model.User entity = Mapper.Map<Model.User>(user);   
             (string hashed, string salt) = await API.Services.HashPassword.HashAsync(user.Password);
             entity.Password = $"{hashed}.{salt}";
+            
             entity = await dataAccess.AddAsync(entity);
             return Created($"api/Shops/{entity.Id}", Mapper.Map<DTO.User>(entity));
         }
@@ -86,8 +87,7 @@ namespace API.Controllers
             Model.User entity = await dataAccess.FindByIdAsync(id);
             if (entity == null) return NotFound();
 
-            entity = Mapper.Map(user,entity);
-            await Context.SaveChangesAsync();
+            entity = await dataAccess.EditAsync(Mapper.Map(user,entity));
             return Accepted(Mapper.Map<DTO.User>(entity));
         }
 

@@ -41,6 +41,15 @@ namespace DAL
             User entity = await FindByLoginAsync(data.Login);
             return entity;
         }
+        public async Task<User> EditAsync (User data)
+        {
+            if (Context.Entry(data).State == EntityState.Detached)
+            {
+                Context.Attach(data).State = EntityState.Modified;
+            }
+            await Context.SaveChangesAsync();
+            return data;
+        }
         public override async Task DeleteAsync (User data) 
         {
             Context.User.Remove(data);

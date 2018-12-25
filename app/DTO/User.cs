@@ -17,7 +17,7 @@ namespace DTO
 
         public DateTime Birthdate { get; set; }
 
-        [DefaultValue(null)]
+        [DefaultValue("Guest")]
         public string Roles { get; set; }
 
         [DefaultValue(true)]

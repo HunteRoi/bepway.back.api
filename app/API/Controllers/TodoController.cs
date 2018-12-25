@@ -25,19 +25,16 @@ namespace API.Controllers
         [Consumes("application/json")]
         [SwaggerResponse(202, "Returns the edited user object", typeof(DTO.User))]
         [SwaggerResponse(400, "If the body does not validate the requirements", typeof(DTO.BusinessError))]
-        [SwaggerResponse(401, "If the user does not exist or the user account is disabled")]
-        [SwaggerResponse(404, "If the resource isn't found")]
+        [SwaggerResponse(404, "If the resource isn't found or the user account is disabled")]
         public async Task<IActionResult> Put(int id, [FromBody] string todoList)
         {
             if (todoList.Length > 1000) return BadRequest(new DTO.BusinessError { Message = "Todo list too long" });
 
             Model.User entity = await dataAccess.FindByIdAsync(id);
-            if (entity == null) return NotFound();
-
-            if (!entity.IsEnabled) return Unauthorized();
-
+            if (entity == null || !entity.IsEnabled) return NotFound();
             entity.TodoList = todoList;
-            await Context.SaveChangesAsync();
+            
+            entity = await dataAccess.EditAsync(entity);
             return Accepted(Mapper.Map<DTO.User>(entity));
         }
     }

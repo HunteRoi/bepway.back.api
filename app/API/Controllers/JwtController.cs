@@ -34,8 +34,7 @@ namespace API.Controllers
             Description = "Returns an access token and its expiration time in seconds"
         )]
         [SwaggerResponse(200, "Returns a token object", typeof(DTO.Token))]
-        [SwaggerResponse(400, "If the body does not validate the requirements")]
-        [SwaggerResponse(401, "If the user account is disabled or the password does not match")]
+        [SwaggerResponse(400, "If the body does not validate the requirements (login or password is wrong or the password does not match")]
         [SwaggerResponse(404, "If the user does not exist or the account is disabled")]
         public async Task<IActionResult> Login([FromBody] DTO.LoginModel loginModel)
         {
@@ -45,10 +44,9 @@ namespace API.Controllers
             if (userFound == null || !userFound.IsEnabled) return NotFound();
 
             List<string> data = userFound.Password.Split('.').ToList();
-            string hashedCheck = data.ElementAt(0);
-            string salt = data.ElementAt(1);
+            (string hashedCheck, string salt) = (data.ElementAt(0), data.ElementAt(1));
             string hashedToVerify = (await API.Services.HashPassword.HashAsync(loginModel.Password, salt)).hashed;
-            if (!isEnabledAndPasswordsMatch(userFound, hashedToVerify, hashedCheck)) 
+            if (!hashedToVerify.Equals(hashedCheck)) 
             {
                 return BadRequest(new DTO.BusinessError { Message = "The login or password is wrong" });
             }
@@ -61,11 +59,6 @@ namespace API.Controllers
                     expires_in = (int)_jwtOptions.ValidFor.TotalSeconds
                 }
             );
-        }
-
-        private bool isEnabledAndPasswordsMatch(Model.User userFound, string hashedToVerify, string hashedCheck)
-        {
-            return userFound.IsEnabled && hashedToVerify.Equals(hashedCheck);
         }
 
         private async Task<JwtSecurityToken> CreateToken(Model.User userFound)

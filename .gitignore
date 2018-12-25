@@ -43,3 +43,4 @@ Thumbs.db
 #ignored files
 app/DAL/secrets.json
 app/API/secrets.json
+docs/aspiration-sociétés-CINEY.cs

@@ -10,6 +10,7 @@ namespace Model
             public const string GESTIONNARY = "Gestionnary";
             public const string PREMIUM = "Premium";
             
+            public const string GUEST = "Guest";
         }
 
         public static class Status

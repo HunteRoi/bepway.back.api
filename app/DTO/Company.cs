@@ -36,10 +36,17 @@ namespace DTO
         [Required]
         public DateTime CreationDate { get; set; }
 
+        public Boolean IsPremium { get; set; }
+        
         public byte[] RowVersion { get; set; }
 
         public ActivitySector ActivitySector { get; set; }
         
         public User Creator { get; set; }
+
+        public override string ToString ()
+        {
+            return $"{Name}, {Address} ({ActivitySector.ToString()}) [{Status} - {CreationDate:g}]";
+        }
     }
 }

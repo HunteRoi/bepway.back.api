@@ -25,12 +25,26 @@ namespace DAL
             }
         }
 
-        public IEnumerable<Record> getAllCompanies() // tweaked into companies of a fixed zoning
+        public HttpResponseMessage LastResponse {get; private set;}
+
+        public async Task<IEnumerable<Record>> getAllCompaniesAsync() // tweaked into companies of a fixed zoning on purpose
         {
-            string response = Client
-                .GetStringAsync("?dataset=societes-de-nos-parcs-dactivite&rows=100&refine.nomparc=Parc+d'activit%C3%A9+%C3%A9conomique+de+Ciney+-+Biron+-+Lienne")
-                .Result;
-            return JValue.Parse(response).SelectToken("records").ToObject<IEnumerable<Record>>();
+            IEnumerable<Record> records = null;
+
+            // LastResponse = await Client.GetAsync("?dataset=societes-de-nos-parcs-dactivites&rows=1400");
+            LastResponse = await Client.GetAsync("?dataset=societes-de-nos-parcs-dactivite&rows=100&refine.nomparc=Parc+d%27activité+économique+de+Ciney+-+Biron+-+Lienne");
+            if (LastResponse.IsSuccessStatusCode)
+            {
+                string content = await LastResponse.Content.ReadAsStringAsync();
+                records = JValue.Parse(content)
+                    .SelectToken("records")
+                    .ToObject<IEnumerable<Record>>()
+                    .Distinct(new StrictKeyEqualityComparer<Record, string>(r => r.Fields.NomEntreprise))
+                    /*.GroupBy(r => r.DatasetId)*/
+                    .OrderBy(r => r.Record_timestamp);
+            }
+
+            return records;
         }
     }
 }
