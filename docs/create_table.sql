@@ -2,6 +2,11 @@
 --ALTER TABLE [db].[User] DROP CONSTRAINT user_pl, user_uk, userCreator_fk;
 
 DROP TABLE [dbo].[Company];
+--DROP TABLE [dbo].[Intersection];
+--DROP TABLE [dbo].[RoadCoordinates];
+--DROP TABLE [dbo].[Road];
+DROP TABLE [dbo].[Zoning];
+DROP TABLE [dbo].[Coordinates];
 DROP TABLE [dbo].[User];
 DROP TABLE [dbo].[ActivitySector];
 
@@ -44,6 +49,7 @@ CREATE TABLE [dbo].[Zoning]
 (
 	[id] INT IDENTITY(0,1),
 	[idOpenData] NVARCHAR(100) NOT NULL,
+	[url] NVARCHAR(200),
 	[name] NVARCHAR(200) NOT NULL,
 	[coordinates_id] INT NOT NULL,
 	
@@ -56,39 +62,39 @@ CREATE TABLE [dbo].[Zoning]
 		ON DELETE CASCADE
 );
 
-CREATE TABLE [dbo].[Road]
-(
-	[id] INT IDENTITY(0,1),
-	[zoning_id] INT NOT NULL,
+--CREATE TABLE [dbo].[Road]
+--(
+--	[id] INT IDENTITY(0,1),
+--	[zoning_id] INT NOT NULL,
 	
-	CONSTRAINT road_pk PRIMARY KEY ([id]),
-	constraint roadZoning_fk
-		FOREIGN KEY ([zoning_id])
-		REFERENCES [dbo].[Zoning] ([id])
-);
+--	CONSTRAINT road_pk PRIMARY KEY ([id]),
+--	constraint roadZoning_fk
+--		FOREIGN KEY ([zoning_id])
+--		REFERENCES [dbo].[Zoning] ([id])
+--);
 
-CREATE TABLE [dbo].[RoadCoordinates]
-(
-	[id] INT IDENTITY(0,1),
-	[zoning_id] INT NOT NULL,
-	[coordinates_id] INT NOT NULL,
+--CREATE TABLE [dbo].[RoadCoordinates]
+--(
+--	[id] INT IDENTITY(0,1),
+--	[zoning_id] INT NOT NULL,
+--	[coordinates_id] INT NOT NULL,
 	
-	CONSTRAINT roadCoordinates_pk PRIMARY KEY ([id]),
-	constraint roadCoordinatesZoning_fk
-		FOREIGN KEY ([zoning_id])
-		REFERENCES [dbo].[Zoning] ([id]),
-	constraint roadCoordinatesCoords_fk
-		FOREIGN KEY ([coordinates_id])
-		REFERENCES [dbo].[Coordinates] ([id])
-		ON DELETE CASCADE
-);
+--	CONSTRAINT roadCoordinates_pk PRIMARY KEY ([id]),
+--	constraint roadCoordinatesZoning_fk
+--		FOREIGN KEY ([zoning_id])
+--		REFERENCES [dbo].[Zoning] ([id]),
+--	constraint roadCoordinatesCoords_fk
+--		FOREIGN KEY ([coordinates_id])
+--		REFERENCES [dbo].[Coordinates] ([id])
+--		ON DELETE CASCADE
+--);
 
-CREATE TABLE [dbo].[Intersection]
-(
-	[id] INT IDENTITY(0,1),
+--CREATE TABLE [dbo].[Intersection]
+--(
+--	[id] INT IDENTITY(0,1),
 	
-	CONSTRAINT interseciton_pk PRIMARY KEY ([id])
-);
+--	CONSTRAINT interseciton_pk PRIMARY KEY ([id])
+--);
 
 CREATE TABLE [dbo].[Company]
 (

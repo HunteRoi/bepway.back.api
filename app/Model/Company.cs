@@ -13,15 +13,15 @@ namespace Model
         public string Description { get; set; }
         public string Status { get; set; }
         public string Address { get; set; }
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
         public DateTime CreationDate { get; set; }
         public int? ActivitySectorId { get; set; }
         public string CreatorId { get; set; }
+        public int CoordinatesId { get; set; }
         public bool IsPremium { get; set; }
         public byte[] RowVersion { get; set; }
 
         public virtual ActivitySector ActivitySector { get; set; }
+        public virtual Coordinates Coordinates { get; set; }
         public virtual User Creator { get; set; }
     }
 }

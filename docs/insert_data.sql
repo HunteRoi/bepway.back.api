@@ -1,5 +1,3 @@
--- missing hashed passwords
-
 --TRUNCATE TABLE [dbo].[User];
 
 INSERT 
@@ -42,3 +40,16 @@ INSERT
 		(SELECT [id] FROM [dbo].[User] WHERE [login] = 'hunteroi')
 	);
 --schsa
+
+
+INSERT 
+	INTO [dbo].[ActivitySector] 
+	VALUES 
+		('Construction'),
+		('Services'),
+		('Industrie'),
+		('Transport/Logistique/Distribution'),
+		('Agro-alimentaire'),
+		('Environnement/Développement durable'),
+		('Numérique'),
+		('Santé');

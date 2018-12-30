@@ -19,7 +19,9 @@ namespace DAL
 
         public virtual DbSet<ActivitySector> ActivitySector { get; set; }
         public virtual DbSet<Company> Company { get; set; }
+        public virtual DbSet<Coordinates> Coordinates { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Zoning> Zoning { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +39,10 @@ namespace DAL
 
             modelBuilder.Entity<Company>(entity =>
             {
+                entity.HasIndex(e => e.IdOpenData)
+                    .HasName("company_uk")
+                    .IsUnique();
+
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.ActivitySectorId).HasColumnName("activitySector_id");
@@ -45,6 +51,8 @@ namespace DAL
                     .IsRequired()
                     .HasColumnName("address")
                     .HasMaxLength(200);
+
+                entity.Property(e => e.CoordinatesId).HasColumnName("coordinates_id");
 
                 entity.Property(e => e.CreationDate)
                     .HasColumnName("creationDate")
@@ -68,14 +76,6 @@ namespace DAL
                     .HasMaxLength(100);
 
                 entity.Property(e => e.IsPremium).HasColumnName("isPremium");
-
-                entity.Property(e => e.Latitude)
-                    .HasColumnName("latitude")
-                    .HasColumnType("numeric(18, 0)");
-
-                entity.Property(e => e.Longitude)
-                    .HasColumnName("longitude")
-                    .HasColumnType("numeric(18, 0)");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -102,12 +102,32 @@ namespace DAL
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("activitySector_fk");
 
+                entity.HasOne(d => d.Coordinates)
+                    .WithMany(p => p.Company)
+                    .HasForeignKey(d => d.CoordinatesId)
+                    .HasConstraintName("companyCoordinates_fk");
+
                 entity.HasOne(d => d.Creator)
                     .WithMany(p => p.Company)
                     .HasPrincipalKey(p => p.Login)
                     .HasForeignKey(d => d.CreatorId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("companyCreator_fk");
+            });
+
+            modelBuilder.Entity<Coordinates>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Latitude)
+                    .IsRequired()
+                    .HasColumnName("latitude")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Longitude)
+                    .IsRequired()
+                    .HasColumnName("longitude")
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -159,6 +179,40 @@ namespace DAL
                     .WithMany(p => p.InverseCreator)
                     .HasForeignKey(d => d.CreatorId)
                     .HasConstraintName("userCreator_fk");
+            });
+
+            modelBuilder.Entity<Zoning>(entity =>
+            {
+                entity.HasIndex(e => e.IdOpenData)
+                    .HasName("zoning_openData_uk")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Name)
+                    .HasName("zoning_uk")
+                    .IsUnique();
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CoordinatesId).HasColumnName("coordinates_id");
+
+                entity.Property(e => e.IdOpenData)
+                    .IsRequired()
+                    .HasColumnName("idOpenData")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Url)
+                    .HasColumnName("url")
+                    .HasMaxLength(200);
+
+                entity.HasOne(d => d.Coordinates)
+                    .WithMany(p => p.Zoning)
+                    .HasForeignKey(d => d.CoordinatesId)
+                    .HasConstraintName("zoningCoordinates_fk");
             });
         }
     }

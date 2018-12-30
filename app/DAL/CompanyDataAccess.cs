@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Model;
+using Microsoft.EntityFrameworkCore.Query;
 
 using System.Globalization;
 using System.Threading;
@@ -21,9 +22,14 @@ namespace DAL
             Context = context;
         }
 
-        private Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Company, ActivitySector> CompanyQueryBase()
+        private IIncludableQueryable<Company, ActivitySector> PrivateCompanyQueryBase()
         {
             return Context.Company.Include(company => company.ActivitySector);
+        }
+
+        private IIncludableQueryable<Company, Coordinates> CompanyQueryBase()
+        {
+            return PrivateCompanyQueryBase().Include(company => company.Coordinates);
         }
 
         public override async Task<IEnumerable<Company>> GetAllAsync (int? pageIndex = 0, int? pageSize = 15, String companyName = null)

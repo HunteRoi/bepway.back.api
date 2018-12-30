@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DTO
 {
-    public class SigninModel
+    public class SignupModel
     {
         [Required]
         public string Login { get; set; }
@@ -19,7 +19,7 @@ namespace DTO
         [Required]
         public DateTime Birthdate { get; set; }
 
-        [DefaultValue(null)]
+        [DefaultValue("Guest")]
         public string Roles {get; set; }
 
         [DefaultValue(true)]

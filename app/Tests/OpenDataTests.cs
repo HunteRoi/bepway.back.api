@@ -1,52 +1,36 @@
 using System;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using DAL;
-using Model;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Newtonsoft.Json.Linq;
-using System.Globalization;
 using System.Threading;
+using System.Threading.Tasks;
+using DAL;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Model;
+using Newtonsoft.Json.Linq;
 
-namespace Tests
-{
+namespace Tests {
     [TestClass]
-    public class OpenDataTests
-    {
+    public class OpenDataTests {
 
         [TestMethod]
-        public async Task GetWorks()
-        {
-            var access = new OpenDataAccess();
-            
-            IEnumerable<Record> records = await access.getAllCompaniesAsync();
-            
-            Assert.IsTrue(access.LastResponse.IsSuccessStatusCode, $"L'appel a échoué : {access.LastResponse.StatusCode}");            
+        public async Task GetWorks () {
+            var access = new OpenDataAccess ();
+
+            IEnumerable<Record> records = await access.getAllCompaniesAsync ();
+
+            Assert.IsTrue (access.LastResponse.IsSuccessStatusCode, $"L'appel a échoué : {access.LastResponse.StatusCode}");
         }
 
         [TestMethod]
-        public void HowItWorks()
-        {
-            CultureInfo ci = Thread.CurrentThread.CurrentCulture;
-            TextInfo ti = ci.TextInfo;
+        public async Task ReturnsCompanies () {
+            var access = new OpenDataAccess ();
 
-            string normalizedCity = ti.ToTitleCase(ti.ToLower("CINEY"));
-            
-            Assert.IsTrue(normalizedCity.Equals("Ciney"));
-        }
+            IEnumerable<Record> records = await access.getAllCompaniesAsync ();
 
-        [TestMethod]
-        public async Task ReturnsCompanies()
-        {
-            var access = new OpenDataAccess();
-
-            IEnumerable<Record> records = await access.getAllCompaniesAsync();       
-            
-            Assert.IsNotNull(records);
+            Assert.IsNotNull (records);
         }
     }
 }

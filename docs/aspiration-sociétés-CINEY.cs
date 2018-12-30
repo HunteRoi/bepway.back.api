@@ -20,8 +20,8 @@ namespace Services
 		{
 			using (var client = new HttpClient()) 
 			{
-				decimal latitude;
-				decimal longitude;
+				string latitude;
+				string longitude;
 				TextInfo ti = Thread.CurrentThread.CurrentCulture.TextInfo;
 				string normalizedCity = ti.ToTitleCase(ti.ToLower(record.Fields.AdresseVille));
 
@@ -34,8 +34,8 @@ namespace Services
 				if (response.IsSuccessStatusCode) {
 					var result = await response.Content.ReadAsStringAsync();
 					var firstLocalisation = JValue.Parse(result).ToObject<Localisation[]>()[0];
-					latitude = Decimal.Parse(firstLocalisation.Lat, CultureInfo.InvariantCulture);
-					longitude = Decimal.Parse (firstLocalisation.Lon, CultureInfo.InvariantCulture);
+					latitude = firstLocalisation.Lat;
+					longitude = firstLocalisation.Lon;
 
 					Model.Company new_company = new Model.Company
 					{

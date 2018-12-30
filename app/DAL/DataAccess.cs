@@ -9,7 +9,7 @@ namespace DAL
     public abstract class DataAccess<T>
     {
         public BepwayContext Context { get; set; }
-        //public ILogger Logger { get; set; }
+        public ILogger Logger { get; set; }
         
         public abstract Task<IEnumerable<T>> GetAllAsync (int? pageIndex = 0, int? pageSize = 15, String name = null);
         public abstract Task<T> FindByIdAsync (int id);

@@ -28,10 +28,10 @@ namespace DTO
         public string Address { get; set; }
 
         [Required]
-        public decimal Latitude { get; set; }
+        public string Latitude { get; set; }
 
         [Required]
-        public decimal Longitude { get; set; }
+        public string Longitude { get; set; }
 
         [Required]
         public DateTime CreationDate { get; set; }
@@ -44,9 +44,5 @@ namespace DTO
         
         public User Creator { get; set; }
 
-        public override string ToString ()
-        {
-            return $"{Name}, {Address} ({ActivitySector.ToString()}) [{Status} - {CreationDate:g}]";
-        }
     }
 }

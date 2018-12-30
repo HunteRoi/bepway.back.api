@@ -34,7 +34,7 @@ namespace API.Controllers
             Description = "Returns an access token and its expiration time in seconds"
         )]
         [SwaggerResponse(200, "Returns a token object", typeof(DTO.Token))]
-        [SwaggerResponse(400, "If the body does not validate the requirements (login or password is wrong or the password does not match")]
+        [SwaggerResponse(400, "If the body does not validate the requirements")]
         [SwaggerResponse(404, "If the user does not exist or the account is disabled")]
         public async Task<IActionResult> Login([FromBody] DTO.LoginModel loginModel)
         {

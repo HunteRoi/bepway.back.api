@@ -15,12 +15,18 @@ namespace API.Infrastructure
                 .ForMember(user => user.Id, opt => opt.Ignore())
                 .ForMember(user => user.Password, opt => opt.Ignore())
                 .ForMember(user => user.Roles, opt => opt.NullSubstitute("Guest"));
-            CreateMap<DTO.SigninModel, Model.User>();
+            CreateMap<DTO.SignupModel, Model.User>()
+                .ForMember(user => user.Roles, opt => opt.NullSubstitute("Guest"));
 
             CreateMap<Model.Company, DTO.Company>();
             CreateMap<DTO.Company, Model.Company>()
                 .ForMember(company => company.Id, opt => opt.Ignore())
                 .ForMember(company => company.IdOpenData, opt => opt.Ignore());
+                
+            CreateMap<Model.Zoning, DTO.Zoning>();
+            CreateMap<DTO.Zoning, Model.Zoning>()
+                .ForMember(zoning => zoning.Id, opt => opt.Ignore())
+                .ForMember(zoning => zoning.IdOpenData, opt => opt.Ignore());
             
             CreateMap<Model.ActivitySector, DTO.ActivitySector>();
             CreateMap<DTO.ActivitySector, Model.ActivitySector>()

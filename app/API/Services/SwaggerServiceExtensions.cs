@@ -61,7 +61,6 @@ namespace API.Services
                 c.RoutePrefix = String.Empty;
                 c.DocumentTitle = "BepWay API - Docs";
                 c.DocExpansion(DocExpansion.List);
-                //c.DisplayOperationId();
             });
  
             return app;
