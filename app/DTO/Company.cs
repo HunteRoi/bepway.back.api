@@ -26,12 +26,6 @@ namespace DTO {
         public string Address { get; set; }
 
         [Required]
-        public string Latitude { get; set; }
-
-        [Required]
-        public string Longitude { get; set; }
-
-        [Required]
         public DateTime CreationDate { get; set; }
 
         public Boolean IsPremium { get; set; }
@@ -39,6 +33,9 @@ namespace DTO {
         public byte[] RowVersion { get; set; }
 
         public ActivitySector ActivitySector { get; set; }
+
+        [Required]
+        public Coordinates Coordinates { get; set; }
 
         public User Creator { get; set; }
 
