@@ -1,10 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DTO
-{
-    public class Company
-    {
+namespace DTO {
+    public class Company {
         [Required]
         public decimal Id { get; set; }
 
@@ -37,11 +35,11 @@ namespace DTO
         public DateTime CreationDate { get; set; }
 
         public Boolean IsPremium { get; set; }
-        
+
         public byte[] RowVersion { get; set; }
 
         public ActivitySector ActivitySector { get; set; }
-        
+
         public User Creator { get; set; }
 
     }

@@ -1,9 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DTO
-{
-    public class Zoning
-    {
+namespace DTO {
+    public class Zoning {
         [Required]
         public int Id { get; set; }
 
@@ -16,6 +14,6 @@ namespace DTO
         [Required]
         public int CoordinatesId { get; set; }
 
-        public string Url {get; set; }
+        public string Url { get; set; }
     }
 }

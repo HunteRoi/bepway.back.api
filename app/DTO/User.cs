@@ -2,10 +2,8 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace DTO
-{
-    public class User
-    {
+namespace DTO {
+    public class User {
         [Required]
         public int Id { get; set; }
 
@@ -17,13 +15,13 @@ namespace DTO
 
         public DateTime Birthdate { get; set; }
 
-        [DefaultValue("Guest")]
+        [DefaultValue ("Guest")]
         public string Roles { get; set; }
 
-        [DefaultValue(true)]
+        [DefaultValue (true)]
         public bool IsEnabled { get; set; }
 
-        [StringLength(1000)]
+        [StringLength (1000)]
         public string TodoList { get; set; }
 
         public byte[] RowVersion { get; set; }

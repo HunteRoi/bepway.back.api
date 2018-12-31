@@ -2,10 +2,8 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace DTO
-{
-    public class SignupModel
-    {
+namespace DTO {
+    public class SignupModel {
         [Required]
         public string Login { get; set; }
 
@@ -19,12 +17,12 @@ namespace DTO
         [Required]
         public DateTime Birthdate { get; set; }
 
-        [DefaultValue("Guest")]
-        public string Roles {get; set; }
+        [DefaultValue ("Guest")]
+        public string Roles { get; set; }
 
-        [DefaultValue(true)]
+        [DefaultValue (true)]
         public bool IsEnabled { get; set; }
-        
+
         public byte[] RowVersion { get; set; }
     }
 }

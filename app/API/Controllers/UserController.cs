@@ -69,7 +69,7 @@ namespace API.Controllers {
         [SwaggerOperation (
             Summary = "Creates a user",
             Description = "Returns the created user data",
-            Consumes = new string[] { "application/json "}
+            Consumes = new string[] { "application/json " }
         )]
         [SwaggerResponse (201, "Returns the created user data and its URI")]
         [SwaggerResponse (400, "If the body does not validate the requirements")]
@@ -89,7 +89,7 @@ namespace API.Controllers {
         [SwaggerOperation (
             Summary = "Edits a user based on their ID",
             Description = "Returns the edited user data",
-            Consumes = new string[] { "application/json "}
+            Consumes = new string[] { "application/json " }
         )]
         [SwaggerResponse (202, "Returns the edited user data", typeof (DTO.User))]
         [SwaggerResponse (400, "If the body does not validate the requirements")]

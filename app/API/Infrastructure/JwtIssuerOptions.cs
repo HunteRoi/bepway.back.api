@@ -2,10 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 
-namespace API.Infrastructure
-{
-  public class JwtIssuerOptions
-  {
+namespace API.Infrastructure {
+  public class JwtIssuerOptions {
     /// <summary>
     /// "iss" (Issuer) Claim
     /// </summary>
@@ -67,7 +65,7 @@ namespace API.Infrastructure
     /// <summary>
     /// Set the timespan the token will be valid for (default is 5 min/300 seconds)
     /// </summary>
-    public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(5); //44640 --> a 31-days month
+    public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes (5); //44640 --> a 31-days month
 
     /// <summary>
     /// "exp" (Expiration Time) Claim (returns IssuedAt + ValidFor)
@@ -79,7 +77,7 @@ namespace API.Infrastructure
     ///   Implementers MAY provide for some small leeway, usually no more than
     ///   a few minutes, to account for clock skew.  Its value MUST be a number
     ///   containing a NumericDate value.  Use of this claim is OPTIONAL.</remarks>
-    public DateTime Expiration => IssuedAt.Add(ValidFor);
+    public DateTime Expiration => IssuedAt.Add (ValidFor);
 
     /// <summary>
     /// "jti" (JWT ID) Claim (default ID is a GUID)
@@ -93,7 +91,7 @@ namespace API.Infrastructure
     ///   to prevent the JWT from being replayed.  The "jti" value is a case-
     ///   sensitive string.  Use of this claim is OPTIONAL.</remarks>
     public Func<Task<string>> JtiGenerator =>
-      () => Task.FromResult(Guid.NewGuid().ToString());
+      () => Task.FromResult (Guid.NewGuid ().ToString ());
 
     /// <summary>
     /// The signing key to use when generating tokens.

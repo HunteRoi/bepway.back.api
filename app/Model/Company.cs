@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model
-{
-    public partial class Company
-    {
+namespace Model {
+    public partial class Company {
         public int Id { get; set; }
         public string IdOpenData { get; set; }
         public string Name { get; set; }

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model
-{
-    public partial class Coordinates
-    {
-        public Coordinates()
-        {
-            Company = new HashSet<Company>();
-            Zoning = new HashSet<Zoning>();
+namespace Model {
+    public partial class Coordinates {
+        public Coordinates () {
+            Company = new HashSet<Company> ();
+            Zoning = new HashSet<Zoning> ();
         }
 
         public int Id { get; set; }

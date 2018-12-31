@@ -33,7 +33,7 @@ namespace API {
             ConfigurationHelper helper = new ConfigurationHelper ("secrets.json");
 
             #region CORS config
-            services.AddCors();
+            services.AddCors ();
             #endregion
 
             #region DB process
@@ -111,13 +111,11 @@ namespace API {
             }
 
             #region CORS config
-            app.UseCors(builder =>
-            {
+            app.UseCors (builder => {
                 builder
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-                
+                    .AllowAnyOrigin ()
+                    .AllowAnyHeader ()
+                    .AllowAnyMethod ();
             });
             #endregion
 

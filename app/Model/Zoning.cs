@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model
-{
-    public partial class Zoning
-    {
+namespace Model {
+    public partial class Zoning {
         public int Id { get; set; }
         public string IdOpenData { get; set; }
         public string Name { get; set; }
