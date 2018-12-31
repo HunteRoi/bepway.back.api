@@ -22,7 +22,8 @@ namespace API.Controllers {
         [HttpPut ("{id:int}")]
         [SwaggerOperation (
             Summary = "Change a user's todo list based on their ID",
-            Description = "Returns the edited user data"
+            Description = "Returns the edited user data",
+            Tags = new string[] { "User" }
         )]
         [SwaggerResponse (202, "Returns the edited user object", typeof (DTO.User))]
         [SwaggerResponse (400, "If the body does not validate the requirements", typeof (DTO.BusinessError))]

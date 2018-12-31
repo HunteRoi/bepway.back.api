@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Model;
 using Microsoft.EntityFrameworkCore.Query;
-
 using System.Globalization;
 using System.Threading;
 using System.Linq;
@@ -47,7 +46,7 @@ namespace DAL
             Company entity = await Context.Company.FindAsync(id);
             return entity;
         }
-        public IEnumerable<Company> FindByName (string name) 
+        private IEnumerable<Company> FindByName (string name) 
         {
             IEnumerable<Company> companies = CompanyQueryBase().Where(c => c.Name.Contains(name));
             return companies;
@@ -70,6 +69,7 @@ namespace DAL
             {
                 Context.Attach(data).State = EntityState.Modified;
             }
+            Context.Entry(data).OriginalValues["RowVersion"] = data.RowVersion;
             await Context.SaveChangesAsync();
             return data;
         }

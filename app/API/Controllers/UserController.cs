@@ -66,10 +66,10 @@ namespace API.Controllers {
 
         [Authorize (Roles = Model.Constants.Roles.ADMIN)]
         [HttpPost]
-        [Consumes ("application/json")]
         [SwaggerOperation (
             Summary = "Creates a user",
-            Description = "Returns the created user data"
+            Description = "Returns the created user data",
+            Consumes = new string[] { "application/json "}
         )]
         [SwaggerResponse (201, "Returns the created user data and its URI")]
         [SwaggerResponse (400, "If the body does not validate the requirements")]
@@ -86,10 +86,10 @@ namespace API.Controllers {
 
         [Authorize (Roles = Model.Constants.Roles.ADMIN)]
         [HttpPut ("{id:int}")]
-        [Consumes ("application/json")]
         [SwaggerOperation (
             Summary = "Edits a user based on their ID",
-            Description = "Returns the edited user data"
+            Description = "Returns the edited user data",
+            Consumes = new string[] { "application/json "}
         )]
         [SwaggerResponse (202, "Returns the edited user data", typeof (DTO.User))]
         [SwaggerResponse (400, "If the body does not validate the requirements")]

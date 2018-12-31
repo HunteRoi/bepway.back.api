@@ -28,13 +28,15 @@ namespace API.Services
                     }
                 });
 
+                c.OrderActionsBy(apiDesc => $"{apiDesc.HttpMethod}_{apiDesc.ActionDescriptor.RouteValues["controller"]}");
+
                 c.DescribeAllParametersInCamelCase();
 
                 c.AddSecurityDefinition("Bearer", new ApiKeyScheme
                 {
                     In = "header",
                     Type = "apiKey",
-                    Description = "JWT Authorization header using the Bearer scheme. Example: `Authorization: Bearer {token}`",
+                    Description = "JWT **Authorization** header using the Bearer scheme. Example: `Bearer {token}`",
                     Name = "Authorization"
                 });
                 c.OperationFilter<SecurityRequirementsOperationFilter>();

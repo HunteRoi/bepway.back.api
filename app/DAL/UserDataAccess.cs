@@ -47,6 +47,7 @@ namespace DAL
             {
                 Context.Attach(data).State = EntityState.Modified;
             }
+            Context.Entry(data).OriginalValues["RowVersion"] = data.RowVersion;
             await Context.SaveChangesAsync();
             return data;
         }

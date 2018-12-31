@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using DAL;
@@ -8,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Model;
+using Newtonsoft.Json.Linq;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers {
@@ -51,10 +57,10 @@ namespace API.Controllers {
 
         [Authorize (Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
         [HttpPost]
-        [Consumes ("application/json")]
         [SwaggerOperation (
             Summary = "Creates a company",
-            Description = "Returns the created company data"
+            Description = "Returns the created company data",
+            Consumes = new string[] { "application/json " }
         )]
         [SwaggerResponse (201, "Returns the created company data and its URI")]
         [SwaggerResponse (400, "If the body does not validate the requirements")]
@@ -63,15 +69,15 @@ namespace API.Controllers {
 
             Model.Company entity = Mapper.Map<Model.Company> (company);
             entity = await dataAccess.AddAsync (entity);
-            return Created ($"api/Shops/{entity.Id}", Mapper.Map<DTO.Company> (entity));
+            return Created ($"api/Company/{entity.Id}", Mapper.Map<DTO.Company> (entity));
         }
 
         [Authorize (Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
         [HttpPut ("{id:int}")]
-        [Consumes ("application/json")]
         [SwaggerOperation (
             Summary = "Edits a company based on their ID",
-            Description = "Returns the edited company data"
+            Description = "Returns the edited company data",
+            Consumes = new string[] { "application/json " }
         )]
         [SwaggerResponse (202, "Returns the edited company data", typeof (DTO.Company))]
         [SwaggerResponse (400, "If the body does not validate the requirements")]

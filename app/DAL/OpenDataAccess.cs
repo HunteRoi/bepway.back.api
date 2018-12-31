@@ -31,8 +31,8 @@ namespace DAL
         {
             IEnumerable<Record> records = null;
 
-            LastResponse = await Client.GetAsync("?dataset=societes-de-nos-parcs-dactivites&rows=1400");
-            //LastResponse = await Client.GetAsync("?dataset=societes-de-nos-parcs-dactivite&rows=100&refine.nomparc=Parc+d%27activité+économique+de+Ciney+-+Biron+-+Lienne");
+            //LastResponse = await Client.GetAsync("?dataset=societes-de-nos-parcs-dactivite&rows=1400");
+            LastResponse = await Client.GetAsync("?dataset=societes-de-nos-parcs-dactivite&rows=100&refine.nomparc=Parc+d%27activité+économique+de+Ciney+-+Biron+-+Lienne");
             if (LastResponse.IsSuccessStatusCode)
             {
                 string content = await LastResponse.Content.ReadAsStringAsync();

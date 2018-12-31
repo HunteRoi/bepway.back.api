@@ -12,7 +12,7 @@ namespace DAL
         {
         }
 
-        public BepwayContext(DbContextOptions<BepwayContext> options)
+        public BepwayContext(DbContextOptions/*<BepwayContext>*/ options)
             : base(options)
         {
         }
