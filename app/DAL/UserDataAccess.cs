@@ -21,7 +21,7 @@ namespace DAL {
         }
 
         public override async Task<User> FindByIdAsync (int id) {
-            User entity = await Context.User.FindAsync (id);
+            User entity = await Context.User.FirstOrDefaultAsync (u => u.Id == id);
             return entity;
         }
         public async Task<User> FindByLoginAsync (string login) {

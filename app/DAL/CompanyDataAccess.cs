@@ -36,7 +36,7 @@ namespace DAL {
         }
 
         public override async Task<Company> FindByIdAsync (int id) {
-            Company entity = await Context.Company.FindAsync (id);
+            Company entity = await CompanyQueryBase ().FirstOrDefaultAsync (c => c.Id == id);
             return entity;
         }
         private IEnumerable<Company> FindByName (string name) {

@@ -33,7 +33,7 @@ namespace DAL {
                 records = JValue.Parse (content)
                     .SelectToken ("records")
                     .ToObject<IEnumerable<Record>> ()
-                    //.Distinct(new StrictKeyEqualityComparer<Record, string>(r => r.Fields.NomEntreprise))
+                    .Distinct(new StrictKeyEqualityComparer<Record, string>(r => r.Fields.NomEntreprise))
                     .OrderBy (r => r.Record_timestamp);
             }
 

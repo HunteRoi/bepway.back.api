@@ -32,7 +32,7 @@ namespace DAL {
         }
 
         public override async Task<Zoning> FindByIdAsync (int id) {
-            Zoning entity = await Context.Zoning.FindAsync (id);
+            Zoning entity = await ZoningQueryBase().FirstOrDefaultAsync (z => z.Id == id);
             return entity;
         }
         private IEnumerable<Zoning> FindByName (string name) {
