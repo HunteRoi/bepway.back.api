@@ -24,9 +24,9 @@ namespace API.Infrastructure
                 .ForMember(company => company.IdOpenData, opt => opt.Ignore());
 
             CreateMap<Model.Zoning, DTO.Zoning>()
-                .ForMember(z => z.Surface, opt => opt.ConvertUsing(new DoubleConverter()));
+                .ForMember(z => z.Surface, opt => opt.ConvertUsing(new DoubleSurfaceConverter()));
             CreateMap<DTO.Zoning, Model.Zoning>()
-                .ForMember(z => z.Surface, opt => opt.ConvertUsing(new StringDoubleConverter()))
+                .ForMember(z => z.Surface, opt => opt.ConvertUsing(new StringSurfaceConverter()))
                 .ForMember(zoning => zoning.Id, opt => opt.Ignore())
                 .ForMember(zoning => zoning.IdOpenData, opt => opt.Ignore());
 
@@ -35,11 +35,11 @@ namespace API.Infrastructure
                 .ForMember(sector => sector.Id, opt => opt.Ignore());
 
             CreateMap<Model.Coordinates, DTO.Coordinates>()
-                .ForMember(c => c.Latitude, opt => opt.ConvertUsing(new DoubleConverter()))
-                .ForMember(c => c.Longitude, opt => opt.ConvertUsing(new DoubleConverter()));
+                .ForMember(c => c.Latitude, opt => opt.ConvertUsing(new DoubleCoordinatesConverter()))
+                .ForMember(c => c.Longitude, opt => opt.ConvertUsing(new DoubleCoordinatesConverter()));
             CreateMap<DTO.Coordinates, Model.Coordinates>()
-                .ForMember(c => c.Latitude, opt => opt.ConvertUsing(new StringDoubleConverter()))
-                .ForMember(c => c.Longitude, opt => opt.ConvertUsing(new StringDoubleConverter()));
+                .ForMember(c => c.Latitude, opt => opt.ConvertUsing(new StringCoordinatesConverter()))
+                .ForMember(c => c.Longitude, opt => opt.ConvertUsing(new StringCoordinatesConverter()));
         }
     }
 }
