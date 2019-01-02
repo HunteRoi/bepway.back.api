@@ -41,6 +41,6 @@ Thumbs.db
 *.dotCover
 
 #ignored files
-app/DAL/secrets.json
+app/Tests/secrets.json
 app/API/secrets.json
-docs/aspiration-sociétés-CINEY.cs
+docs/aspiration-sociï¿½tï¿½s-CINEY.cs
