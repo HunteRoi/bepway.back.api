@@ -28,7 +28,7 @@ namespace API.Services
                     }
                 });
 
-                c.OrderActionsBy(apiDesc => $"{apiDesc.HttpMethod}_{apiDesc.ActionDescriptor.RouteValues["controller"]}");
+                c.OrderActionsBy(apiDesc => $"{apiDesc.ActionDescriptor.RouteValues["action"]}");
 
                 c.DescribeAllParametersInCamelCase();
 
@@ -63,6 +63,7 @@ namespace API.Services
                 c.RoutePrefix = String.Empty;
                 c.DocumentTitle = "BepWay API - Docs";
                 c.DocExpansion(DocExpansion.List);
+                c.DisplayOperationId();
             });
 
             return app;

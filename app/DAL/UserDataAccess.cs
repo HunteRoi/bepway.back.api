@@ -14,9 +14,15 @@ namespace DAL
             Context = context;
         }
 
-        public override int GetTotalCount(String userName = null)
+        public override int GetTotalCount(String userName = null, int? creatorId = null)
         {
-            return Context.User.Where(u => userName == null || u.Login.ToLower().Contains(userName.ToLower())).Count();
+            return Context.User
+                .Where(u => 
+                    (creatorId == null || u.CreatorId == creatorId) 
+                    && 
+                    (userName == null || u.Login.ToLower().Contains(userName.ToLower()))
+                )
+                .Count();
         }
 
         public override async Task<IEnumerable<User>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String userName = null)

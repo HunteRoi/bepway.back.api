@@ -21,19 +21,23 @@ namespace DAL
             Context = context;
         }
 
-        private IIncludableQueryable<Company, ActivitySector> PrivateCompanyQueryBase()
+        private IIncludableQueryable<Company, Zoning> CompanyQueryBase()
         {
-            return Context.Company.Include(company => company.ActivitySector);
+            return Context.Company
+                .Include(company => company.ActivitySector)
+                .Include(company => company.Coordinates)
+                .Include(company => company.Zoning);
         }
 
-        private IIncludableQueryable<Company, Coordinates> CompanyQueryBase()
+        public override int GetTotalCount (String companyName = null, int? zoningId = null)
         {
-            return PrivateCompanyQueryBase().Include(company => company.Coordinates);
-        }
-
-        public override int GetTotalCount(String companyName = null)
-        {
-            return CompanyQueryBase().Where(c => companyName == null || c.Name.ToLower().Contains(companyName.ToLower())).Count();
+            return CompanyQueryBase()
+                .Where(c =>
+                    (zoningId == null || c.ZoningId == zoningId)
+                    &&
+                    (companyName == null || c.Name.ToLower().Contains(companyName.ToLower()))
+                )
+                .Count();
         }
 
         public override async Task<IEnumerable<Company>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null)
@@ -42,7 +46,12 @@ namespace DAL
                 .Where(company => companyName == null || company.Name.ToLower().Contains(companyName.ToLower()))
                 .OrderBy(company => company.Id)
                 .TakePage(pageIndex.Value, pageSize.Value)
-                .ToArrayAsync();
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Company>> GetAllByZoningIdAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null, int? zoningId = null)
+        {
+            return (await GetAllAsync(pageIndex, pageSize, companyName)).Where(company => zoningId == null || company.ZoningId == zoningId);
         }
 
         public override async Task<Company> FindByIdAsync(int id)
@@ -66,7 +75,7 @@ namespace DAL
             await Context.SaveChangesAsync();
             return data;
         }
-        
+
         public async Task<Company> EditAsync(Company data)
         {
             if (Context.Entry(data).State == EntityState.Detached)

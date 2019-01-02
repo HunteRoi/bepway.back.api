@@ -12,7 +12,7 @@ namespace DAL
         public BepwayContext Context { get; set; }
         public ILogger Logger { get; set; }
 
-        public abstract int GetTotalCount(String name = null);
+        public abstract int GetTotalCount(String name = null, int? id = null);
         public abstract Task<IEnumerable<T>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String name = null);
         public abstract Task<T> FindByIdAsync(int id);
         public abstract Task<T> AddAsync(T data);

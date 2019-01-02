@@ -23,10 +23,11 @@ namespace DAL
 
         private IIncludableQueryable<Zoning, Coordinates> ZoningQueryBase()
         {
-            return Context.Zoning.Include(zoning => zoning.Coordinates);
+            return Context.Zoning
+                .Include(zoning => zoning.Coordinates);
         }
 
-        public override int GetTotalCount(String zoningName = null)
+        public override int GetTotalCount(String zoningName = null, int? id = null)
         {
             return ZoningQueryBase().Where(z => zoningName == null || z.Name.ToLower().Contains(zoningName.ToLower())).Count();
         }

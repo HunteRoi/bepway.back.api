@@ -32,7 +32,7 @@ namespace API.Controllers
         [SwaggerResponse(202, "Returns the edited user", typeof(DTO.User))]
         [SwaggerResponse(400, "If the body does not validate the requirements")]
         [SwaggerResponse(404, "If the user login and ID do not match, if the user does not exist or the account is disabled")]
-        public async Task<IActionResult> Put(int id, [FromBody] DTO.NewLoginModel model)
+        public async Task<IActionResult> PutNewPassword(int id, [FromBody] DTO.NewLoginModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

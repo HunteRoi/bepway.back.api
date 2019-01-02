@@ -31,16 +31,18 @@ namespace API.Controllers
             dataAccess = new CompanyDataAccess(Context);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = Model.Constants.Roles.GUEST + "," + Model.Constants.Roles.PREMIUM + "," + Model.Constants.Roles.GESTIONNARY + "," + Model.Constants.Roles.ADMIN)]
         [HttpGet]
         [SwaggerOperation(
-            Summary = "Requests a page of companies",
+            Summary = "Requests a page of companies from a certain zoning if provided",
             Description = "Returns a certain number of companies"
         )]
         [SwaggerResponse(200, "Returns an array of companies", typeof(IEnumerable<DTO.Company>))]
-        public async Task<IActionResult> Get(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null)
+        [SwaggerResponse(400, "If the zoning does not exist")]
+        public async Task<IActionResult> Get(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null, int? idZoning = null)
         {
-            IEnumerable<Model.Company> entities = await dataAccess.GetAllAsync(pageIndex.Value, pageSize.Value, companyName);
+            IEnumerable<Model.Company> entities = await dataAccess.GetAllByZoningIdAsync(pageIndex, pageSize, companyName, idZoning);
+            if (entities == null) return NotFound();
 
             Request.HttpContext.Response.Headers.Add("X-TotalCount", dataAccess.GetTotalCount().ToString());
             Request.HttpContext.Response.Headers.Add("X-PageIndex", pageIndex.Value.ToString());
@@ -49,7 +51,7 @@ namespace API.Controllers
             return Ok(entities.Select(Mapper.Map<DTO.Company>));
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = Model.Constants.Roles.GUEST + "," + Model.Constants.Roles.PREMIUM + "," + Model.Constants.Roles.GESTIONNARY + "," + Model.Constants.Roles.ADMIN)]
         [HttpGet("{id:int}")]
         [SwaggerOperation(
             Summary = "Requests a company based on their ID",

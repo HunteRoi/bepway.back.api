@@ -31,7 +31,7 @@ namespace API.Controllers
         [SwaggerResponse(202, "Returns the edited user object", typeof(DTO.User))]
         [SwaggerResponse(400, "If the body does not validate the requirements", typeof(DTO.Error))]
         [SwaggerResponse(404, "If the resource isn't found or the user account is disabled")]
-        public async Task<IActionResult> Put(int id, [FromBody] string todoList)
+        public async Task<IActionResult> PutTodo(int id, [FromBody] string todoList)
         {
             if (todoList.Length > 1000) return BadRequest(new DTO.Error { Message = "Todo list too long" });
 

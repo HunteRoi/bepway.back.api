@@ -52,6 +52,9 @@ CREATE TABLE [dbo].[Zoning]
 	[ntisid] INT NOT NULL,
 	[name] NVARCHAR(200) NOT NULL,
 	[coordinates_id] INT NOT NULL,
+	[localisation] NVARCHAR(200) NOT NULL,
+	[township] NVARCHAR(200) NOT NULL,
+	[surface] NVARCHAR(100) NOT NULL,
 	
 	CONSTRAINT zoning_pk PRIMARY KEY ([id]),
 	CONSTRAINT zoning_uk UNIQUE ([name]),

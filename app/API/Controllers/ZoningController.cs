@@ -26,7 +26,7 @@ namespace API.Controllers
             dataAccess = new ZoningDataAccess(Context);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = Model.Constants.Roles.GUEST + "," + Model.Constants.Roles.PREMIUM + "," + Model.Constants.Roles.GESTIONNARY + "," + Model.Constants.Roles.ADMIN)]
         [HttpGet]
         [SwaggerOperation(
             Summary = "Requests a page of zonings",
@@ -41,11 +41,15 @@ namespace API.Controllers
             Request.HttpContext.Response.Headers.Add("X-PageIndex", pageIndex.Value.ToString());
             Request.HttpContext.Response.Headers.Add("X-PageSize", pageSize.Value.ToString());
 
-
-            return Ok(entities.Select(Mapper.Map<DTO.Zoning>));
+            IEnumerable<DTO.Zoning> zonings = entities.Select(entity => {
+                DTO.Zoning zoning = Mapper.Map<DTO.Zoning>(entity);
+                zoning.NbImplantations = new CompanyDataAccess(Context).GetTotalCount(zoningId: zoning.Id);
+                return zoning;
+            });
+            return Ok(zonings);
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles = Model.Constants.Roles.GUEST + "," + Model.Constants.Roles.PREMIUM + "," + Model.Constants.Roles.GESTIONNARY + "," + Model.Constants.Roles.ADMIN)]
         [HttpGet("{id:int}")]
         [SwaggerOperation(
             Summary = "Requests a zoning based on their ID",
@@ -58,7 +62,9 @@ namespace API.Controllers
             Model.Zoning entity = await dataAccess.FindByIdAsync(id);
             if (entity == null) return NotFound();
 
-            return Ok(Mapper.Map<DTO.Zoning>(entity));
+            DTO.Zoning zoning = Mapper.Map<DTO.Zoning>(entity);
+            zoning.NbImplantations = new CompanyDataAccess(Context).GetTotalCount(zoningId: zoning.Id);
+            return Ok(zoning);
         }
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
@@ -70,13 +76,16 @@ namespace API.Controllers
         )]
         [SwaggerResponse(201, "Returns the created zoning data and its URI")]
         [SwaggerResponse(400, "If the body does not validate the requirements")]
-        public async Task<IActionResult> Post([FromBody] DTO.Zoning zoning)
+        public async Task<IActionResult> Post([FromBody] DTO.Zoning data)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            Model.Zoning entity = Mapper.Map<Model.Zoning>(zoning);
+            Model.Zoning entity = Mapper.Map<Model.Zoning>(data);
             entity = await dataAccess.AddAsync(entity);
-            return Created($"api/Zoning/{entity.Id}", Mapper.Map<DTO.Zoning>(entity));
+
+            DTO.Zoning zoning = Mapper.Map<DTO.Zoning>(entity);
+            zoning.NbImplantations = new CompanyDataAccess(Context).GetTotalCount(zoningId: zoning.Id);
+            return Created($"api/Zoning/{entity.Id}", zoning);
         }
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
@@ -89,15 +98,18 @@ namespace API.Controllers
         [SwaggerResponse(202, "Returns the edited zoning data", typeof(DTO.Zoning))]
         [SwaggerResponse(400, "If the body does not validate the requirements")]
         [SwaggerResponse(404, "If the zoning does not exist")]
-        public async Task<IActionResult> Put(int id, [FromBody] DTO.Zoning zoning)
+        public async Task<IActionResult> Put(int id, [FromBody] DTO.Zoning data)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             Model.Zoning entity = await dataAccess.FindByIdAsync(id);
             if (entity == null) return NotFound();
 
-            entity = await dataAccess.EditAsync(Mapper.Map(zoning, entity));
-            return Accepted(Mapper.Map<DTO.Zoning>(entity));
+            entity = await dataAccess.EditAsync(Mapper.Map(data, entity));
+
+            DTO.Zoning zoning = Mapper.Map<DTO.Zoning>(entity);
+            zoning.NbImplantations = new CompanyDataAccess(Context).GetTotalCount(zoningId: zoning.Id);
+            return Accepted(zoning);
         }
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
@@ -114,7 +126,10 @@ namespace API.Controllers
             if (entity == null) return NotFound();
 
             await dataAccess.DeleteAsync(entity);
-            return Accepted(Mapper.Map<DTO.Zoning>(entity));
+
+            DTO.Zoning zoning = Mapper.Map<DTO.Zoning>(entity);
+            zoning.NbImplantations = new CompanyDataAccess(Context).GetTotalCount(zoningId: zoning.Id);
+            return Accepted(zoning);
         }
     }
 }
