@@ -7,8 +7,6 @@ namespace DTO
         [Required]
         public int Id { get; set; }
 
-        [Required]
-        public string IdOpenData { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -21,5 +19,11 @@ namespace DTO
         public int Nsitid { get; set; }
 
         public int NbImplantations { get; set; }
+
+        public string Localisation { get; set; }
+
+        public string Township { get; set; }
+
+        public double Surface { get; set; }
     }
 }

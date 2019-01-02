@@ -8,14 +8,9 @@ namespace DAL
 {
     public partial class BepwayContext : DbContext
     {
-        public BepwayContext()
-        {
-        }
+        public BepwayContext() { }
 
-        public BepwayContext(DbContextOptions/*<BepwayContext>*/ options)
-            : base(options)
-        {
-        }
+        public BepwayContext(DbContextOptions/*<BepwayContext>*/ options) : base(options) { }
 
         public virtual DbSet<ActivitySector> ActivitySector { get; set; }
         public virtual DbSet<Company> Company { get; set; }
@@ -208,12 +203,27 @@ namespace DAL
                     .HasColumnName("idOpenData")
                     .HasMaxLength(100);
 
+                entity.Property(e => e.Localisation)
+                    .IsRequired()
+                    .HasColumnName("localisation")
+                    .HasMaxLength(200);
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
                     .HasMaxLength(200);
 
                 entity.Property(e => e.Nsitid).HasColumnName("nsitid");
+
+                entity.Property(e => e.Surface)
+                    .IsRequired()
+                    .HasColumnName("surface")
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.Township)
+                    .IsRequired()
+                    .HasColumnName("township")
+                    .HasMaxLength(200);
 
                 entity.HasOne(d => d.Coordinates)
                     .WithMany(p => p.Zoning)

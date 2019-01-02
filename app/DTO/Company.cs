@@ -10,9 +10,6 @@ namespace DTO
         public decimal Id { get; set; }
 
         [Required]
-        public string IdOpenData { get; set; }
-
-        [Required]
         public string Name { get; set; }
 
         [Url]
