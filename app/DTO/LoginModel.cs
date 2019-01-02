@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DTO {
-    public class LoginModel {
+namespace DTO
+{
+    public class LoginModel
+    {
         [Required]
         public string Login { get; set; }
 

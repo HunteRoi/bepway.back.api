@@ -12,49 +12,64 @@ using Microsoft.EntityFrameworkCore.Query;
 using Model;
 using Newtonsoft.Json.Linq;
 
-namespace DAL {
-    public class ZoningDataAccess : DataAccess<Zoning> {
-        public ZoningDataAccess (BepwayContext context) {
+namespace DAL
+{
+    public class ZoningDataAccess : DataAccess<Zoning>
+    {
+        public ZoningDataAccess(BepwayContext context)
+        {
             Context = context;
         }
 
-        private IIncludableQueryable<Zoning, Coordinates> ZoningQueryBase () {
-            return Context.Zoning.Include (zoning => zoning.Coordinates);
+        private IIncludableQueryable<Zoning, Coordinates> ZoningQueryBase()
+        {
+            return Context.Zoning.Include(zoning => zoning.Coordinates);
         }
 
-        public override async Task<IEnumerable<Zoning>> GetAllAsync (int? pageIndex = 0, int? pageSize = 15, String zoningName = null) {
-            IEnumerable<Zoning> companies = await ZoningQueryBase ()
-                .Where (zoning => zoningName == null || zoning.Name.Contains (zoningName))
-                .OrderBy (zoning => zoning.Id)
-                .TakePage (pageIndex.Value, pageSize.Value)
-                .ToArrayAsync ();
-            return companies;
+        public override int GetTotalCount(String zoningName = null)
+        {
+            return ZoningQueryBase().Where(z => zoningName == null || z.Name.ToLower().Contains(zoningName.ToLower())).Count();
         }
 
-        public override async Task<Zoning> FindByIdAsync (int id) {
-            Zoning entity = await ZoningQueryBase().FirstOrDefaultAsync (z => z.Id == id);
-            return entity;
+        public override async Task<IEnumerable<Zoning>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String zoningName = null)
+        {
+            return await ZoningQueryBase()
+                .Where(zoning => zoningName == null || zoning.Name.ToLower().Contains(zoningName.ToLower()))
+                .OrderBy(zoning => zoning.Id)
+                .TakePage(pageIndex.Value, pageSize.Value)
+                .ToArrayAsync();
         }
-        private IEnumerable<Zoning> FindByName (string name) {
-            IEnumerable<Zoning> companies = ZoningQueryBase ().Where (c => c.Name.Contains (name));
-            return companies;
+
+        public override async Task<Zoning> FindByIdAsync(int id)
+        {
+            return await ZoningQueryBase().FirstOrDefaultAsync(z => z.Id == id);
         }
-        public override async Task<Zoning> AddAsync (Zoning data) {
-            Context.Zoning.Add (data);
-            await Context.SaveChangesAsync ();
-            Zoning entity = FindByName (data.Name).FirstOrDefault ();
-            return entity;
+
+        private IEnumerable<Zoning> FindByName(string name)
+        {
+            return ZoningQueryBase().Where(c => c.Name.ToLower().Contains(name.ToLower()));
         }
-        public async Task<Zoning> EditAsync (Zoning data) {
-            if (Context.Entry (data).State == EntityState.Detached) {
-                Context.Attach (data).State = EntityState.Modified;
-            }
-            await Context.SaveChangesAsync ();
+
+        public override async Task<Zoning> AddAsync(Zoning data)
+        {
+            Context.Zoning.Add(data);
+            await Context.SaveChangesAsync();
             return data;
         }
-        public override async Task DeleteAsync (Zoning data) {
-            Context.Zoning.Remove (data);
-            await Context.SaveChangesAsync ();
+        
+        public async Task<Zoning> EditAsync(Zoning data)
+        {
+            if (Context.Entry(data).State == EntityState.Detached)
+            {
+                Context.Attach(data).State = EntityState.Modified;
+            }
+            await Context.SaveChangesAsync();
+            return data;
+        }
+        public override async Task DeleteAsync(Zoning data)
+        {
+            Context.Zoning.Remove(data);
+            await Context.SaveChangesAsync();
         }
     }
 }

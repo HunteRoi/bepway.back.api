@@ -19,52 +19,60 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-[assembly : ApiController]
-namespace API {
-    public class Startup {
-        public Startup (IConfiguration configuration) {
+[assembly: ApiController]
+namespace API
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices (IServiceCollection services) {
-            ConfigurationHelper helper = new ConfigurationHelper ("secrets.json");
+        public void ConfigureServices(IServiceCollection services)
+        {
+            ConfigurationHelper helper = new ConfigurationHelper("secrets.json");
 
             #region CORS config
-            services.AddCors ();
+            services.AddCors();
             #endregion
 
             #region DB process
-            services.AddDbContext<BepwayContext> (options => {
-                string connectionString = helper.Get ("BepWayConnectionString");
-                options.UseSqlServer (connectionString);
+            services.AddDbContext<BepwayContext>(options =>
+            {
+                string connectionString = helper.Get("BepwayConnectionString");
+                options.UseSqlServer(connectionString);
             });
             #endregion
 
             #region Swagger/OpenAPI
-            services.AddSwaggerDocumentation ();
+            services.AddSwaggerDocumentation();
             #endregion
 
             #region Authentification
-            string Issuer = helper.Get ("Authentication:Issuer");
-            string Audience = helper.Get ("Authentication:Audience");
+            string Issuer = helper.Get("Authentication:Issuer");
+            string Audience = helper.Get("Authentication:Audience");
 
-            services.AddAuthorization (options => {
-                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder (JwtBearerDefaults.AuthenticationScheme);
-                defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser ();
-                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build ();
+            services.AddAuthorization(options =>
+            {
+                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
+                defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
             });
 
-            SymmetricSecurityKey _signingKey = new SymmetricSecurityKey (Encoding.ASCII.GetBytes (helper.Get ("SecretKey")));
-            services.Configure<JwtIssuerOptions> (options => {
+            SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(helper.Get("SecretKey")));
+            services.Configure<JwtIssuerOptions>(options =>
+            {
                 options.Issuer = Issuer;
                 options.Audience = Audience;
-                options.SigningCredentials = new SigningCredentials (_signingKey, SecurityAlgorithms.HmacSha256);
+                options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
 
-            var tokenValidationParameters = new TokenValidationParameters {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
                 ValidateIssuer = true,
                 ValidIssuer = Issuer,
 
@@ -81,8 +89,9 @@ namespace API {
             };
 
             services
-                .AddAuthentication (options => options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer (JwtBearerDefaults.AuthenticationScheme, options => {
+                .AddAuthentication(options => options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
                     options.Audience = Audience;
                     options.ClaimsIssuer = Issuer;
                     options.TokenValidationParameters = tokenValidationParameters;
@@ -91,75 +100,88 @@ namespace API {
             #endregion
 
             #region AutoMapper
-            services.AddAutoMapper ();
+            services.AddAutoMapper();
             #endregion
 
             services
-                .AddMvc (options => {
-                    options.Filters.Add (typeof (BusinessExceptionFilter));
+                .AddMvc(options =>
+                {
+                    options.Filters.Add(typeof(BusinessExceptionFilter));
                 })
-                .AddJsonOptions (options => options.SerializerSettings.Formatting = Formatting.Indented)
-                .SetCompatibilityVersion (CompatibilityVersion.Version_2_2);
+                .AddJsonOptions(options => options.SerializerSettings.Formatting = Formatting.Indented)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure (IApplicationBuilder app, IHostingEnvironment env) {
-            if (env.IsDevelopment ()) {
-                app.UseDeveloperExceptionPage ();
-            } else {
-                app.UseHsts ();
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHsts();
             }
 
             #region CORS config
-            app.UseCors (builder => {
+            app.UseCors(builder =>
+            {
                 builder
-                    .AllowAnyOrigin ()
-                    .AllowAnyHeader ()
-                    .AllowAnyMethod ();
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
             #endregion
 
             #region Swagger/OpenAPI
-            app.UseSwaggerDocumentation ();
+            app.UseSwaggerDocumentation();
             #endregion
 
             #region Global exceptions handler
-            app.UseExceptionHandler (errorApp => {
-                errorApp.Run (async context => {
-                    await Task.Run (() => {
-                        var errorFeature = context.Features.Get<IExceptionHandlerFeature> ();
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
+                    await Task.Run(() =>
+                    {
+                        var errorFeature = context.Features.Get<IExceptionHandlerFeature>();
                         var exception = errorFeature.Error;
 
-                        var problemDetails = new ProblemDetails {
+                        var problemDetails = new ProblemDetails
+                        {
                             Instance = $"urn:bepway:error:{Guid.NewGuid()}"
                         };
 
-                        if (exception is BadHttpRequestException badHttpRequestException) {
+                        if (exception is BadHttpRequestException badHttpRequestException)
+                        {
                             problemDetails.Title = "Invalid request";
-                            problemDetails.Status = (int) typeof (BadHttpRequestException)
-                                .GetProperty ("StatusCode", BindingFlags.NonPublic | BindingFlags.Instance)
-                                .GetValue (badHttpRequestException);
+                            problemDetails.Status = (int)typeof(BadHttpRequestException)
+                                .GetProperty("StatusCode", BindingFlags.NonPublic | BindingFlags.Instance)
+                                .GetValue(badHttpRequestException);
                             problemDetails.Detail = badHttpRequestException.Message;
-                        } else {
+                        }
+                        else
+                        {
                             problemDetails.Title = "An unexpected error occurred!";
                             problemDetails.Status = 500;
                             problemDetails.Detail =
                                 /*context.Request.IsTrusted()
                                                            ? */
-                                exception.ToString ()
+                                exception.ToString()
                             /*: "Wow that's an interesting error you've got there!"*/
                             ;
                         }
 
                         context.Response.StatusCode = problemDetails.Status.Value;
-                        context.Response.WriteJson (problemDetails);
+                        context.Response.WriteJson(problemDetails);
                     });
                 });
             });
             #endregion
 
-            app.UseHttpsRedirection ();
-            app.UseMvc ();
+            app.UseHttpsRedirection();
+            app.UseMvc();
         }
     }
 }

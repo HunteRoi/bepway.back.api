@@ -7,15 +7,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace API.Controllers {
-    public class APIController : ControllerBase {
+namespace API.Controllers
+{
+    public class APIController : ControllerBase
+    {
         private BepwayContext context;
-        public BepwayContext Context {
+        private IMapper mapper;
+        public BepwayContext Context
+        {
             get => context;
             set => context = value ??
-                throw new ArgumentNullException (nameof (value));
+                throw new ArgumentNullException(nameof(value));
         }
-        public IMapper Mapper { get; set; }
+        public IMapper Mapper
+        {
+            get => mapper;
+            set => mapper = value ??
+                throw new ArgumentNullException(nameof(value));
+        }
+
         public ILogger Logger { get; set; }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model {
-    public partial class ActivitySector {
-        public ActivitySector () {
-            Company = new HashSet<Company> ();
+namespace Model
+{
+    public partial class ActivitySector
+    {
+        public ActivitySector()
+        {
+            Company = new HashSet<Company>();
         }
 
         public int Id { get; set; }

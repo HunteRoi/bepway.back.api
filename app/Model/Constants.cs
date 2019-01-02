@@ -15,5 +15,10 @@ namespace Model {
             public const string EXPIRED = "Expired";
 
         }
+
+        public static class Page {
+            public const int Index = 0;
+            public const int Size = 15;
+        }
     }
 }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Model {
-    public partial class User {
-        public User () {
-            Company = new HashSet<Company> ();
-            InverseCreator = new HashSet<User> ();
+namespace Model
+{
+    public partial class User
+    {
+        public User()
+        {
+            Company = new HashSet<Company>();
+            InverseCreator = new HashSet<User>();
         }
 
         public int Id { get; set; }

@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DTO {
-    public class Company {
+namespace DTO
+{
+    public class Company
+    {
         [Required]
         public decimal Id { get; set; }
 

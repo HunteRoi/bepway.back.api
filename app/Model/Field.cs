@@ -1,5 +1,7 @@
-namespace Model {
-    public class Field {
+namespace Model
+{
+    public class Field
+    {
         public int AdresseCodePostal { get; set; }
         public string New_secteur_d_activites { get; set; }
         public string AdresseArrondissement { get; set; }
