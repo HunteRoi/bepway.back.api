@@ -54,7 +54,7 @@ namespace API.Services
             {
                 c.DefaultModelExpandDepth(2);
                 c.DefaultModelRendering(ModelRendering.Example);
-                c.DefaultModelsExpandDepth(-1);
+                //c.DefaultModelsExpandDepth(-1);
                 c.EnableDeepLinking();
 
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "BepWay API - v1");
