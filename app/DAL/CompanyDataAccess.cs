@@ -54,9 +54,9 @@ namespace DAL
             return (await GetAllAsync(pageIndex, pageSize, companyName)).Where(company => zoningId == null || company.ZoningId == zoningId);
         }
 
-        public override async Task<Company> FindByIdAsync(int id)
+        public override Task<Company> FindByIdAsync(int id)
         {
-            return await CompanyQueryBase().FirstOrDefaultAsync(c => c.Id == id);
+            return CompanyQueryBase().FirstOrDefaultAsync(c => c.Id == id);
         }
 
         private IEnumerable<Company> FindByName(string name)
@@ -64,9 +64,9 @@ namespace DAL
             return CompanyQueryBase().Where(c => c.Name.ToLower().Contains(name.ToLower()));
         }
 
-        public async Task<Company> FindByAddressAsync(string address)
+        public Task<Company> FindByAddressAsync(string address)
         {
-            return await CompanyQueryBase().FirstOrDefaultAsync(company => company.Address.ToLower().Contains(address.ToLower()));
+            return CompanyQueryBase().FirstOrDefaultAsync(company => company.Address.ToLower().Contains(address.ToLower()));
         }
 
         public override async Task<Company> AddAsync(Company data)

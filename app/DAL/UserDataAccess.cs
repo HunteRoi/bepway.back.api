@@ -34,14 +34,14 @@ namespace DAL
                 .ToArrayAsync();
         }
 
-        public override async Task<User> FindByIdAsync(int id)
+        public override Task<User> FindByIdAsync(int id)
         {
-            return await Context.User.FirstOrDefaultAsync(u => u.Id == id);
+            return Context.User.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> FindByLoginAsync(string login)
+        public Task<User> FindByLoginAsync(string login)
         {
-            return await Context.User.FirstOrDefaultAsync(user => user.Login.ToLower().Contains(login.ToLower()));
+            return Context.User.FirstOrDefaultAsync(user => user.Login.ToLower().Contains(login.ToLower()));
         }
 
         public override async Task<User> AddAsync(User data)

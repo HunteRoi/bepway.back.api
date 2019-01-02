@@ -41,9 +41,9 @@ namespace DAL
                 .ToArrayAsync();
         }
 
-        public override async Task<Zoning> FindByIdAsync(int id)
+        public override Task<Zoning> FindByIdAsync(int id)
         {
-            return await ZoningQueryBase().FirstOrDefaultAsync(z => z.Id == id);
+            return ZoningQueryBase().FirstOrDefaultAsync(z => z.Id == id);
         }
 
         private IEnumerable<Zoning> FindByName(string name)
