@@ -49,11 +49,11 @@ CREATE TABLE [dbo].[Zoning]
 (
 	[id] INT IDENTITY(0,1),
 	[idOpenData] NVARCHAR(100) NOT NULL,
-	[url] NVARCHAR(200),
+	[ntisid] INT NOT NULL,
 	[name] NVARCHAR(200) NOT NULL,
 	[coordinates_id] INT NOT NULL,
 	
-	CONSTRAINT zoning_fk PRIMARY KEY ([id]),
+	CONSTRAINT zoning_pk PRIMARY KEY ([id]),
 	CONSTRAINT zoning_uk UNIQUE ([name]),
 	CONSTRAINT zoning_openData_uk UNIQUE ([idOpenData]),
 	constraint zoningCoordinates_fk
@@ -110,6 +110,7 @@ CREATE TABLE [dbo].[Company]
 	[activitySector_id] INT,
 	[creator_id] NVARCHAR(50),
 	[coordinates_id] INT NOT NULL,
+	[zoning_id] INT NOT NULL,
 	[isPremium] BIT NOT NULL,
 	[rowVersion] TIMESTAMP,
 
@@ -123,8 +124,12 @@ CREATE TABLE [dbo].[Company]
 		FOREIGN KEY ([creator_id])
 		REFERENCES [dbo].[User] ([login])
 		ON DELETE SET NULL,
-	constraint companyCoordinates_fk
+	CONSTRAINT companyCoordinates_fk
 		FOREIGN KEY ([coordinates_id])
 		REFERENCES [dbo].[Coordinates] ([id])
-		ON DELETE CASCADE
+		ON DELETE CASCADE,
+	CONSTRAINT zoning_fk
+		FOREIGN KEY ([zoning_id])
+		REFERENCES [dbo].[Zoning] ([id])
+		ON DELETE CASCADE;
 );

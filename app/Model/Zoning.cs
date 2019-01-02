@@ -5,12 +5,18 @@ namespace Model
 {
     public partial class Zoning
     {
+        public Zoning()
+        {
+            Company = new HashSet<Company>();
+        }
+
         public int Id { get; set; }
         public string IdOpenData { get; set; }
         public string Name { get; set; }
         public int CoordinatesId { get; set; }
-        public string Url { get; set; }
+        public int Nsitid { get; set; }
 
         public virtual Coordinates Coordinates { get; set; }
+        public virtual ICollection<Company> Company { get; set; }
     }
 }

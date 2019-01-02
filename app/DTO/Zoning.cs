@@ -14,8 +14,10 @@ namespace DTO
         public string Name { get; set; }
 
         [Required]
-        public int CoordinatesId { get; set; }
+        public Coordinates Coordinates { get; set; }
 
-        public string Url { get; set; }
+        public string Url { get => "http://www.bep-entreprises.be/parcs/"+Ntisid.ToString(); }
+
+        public int Ntisid { get; set; }
     }
 }

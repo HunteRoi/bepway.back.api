@@ -19,9 +19,11 @@ namespace Model
         public int CoordinatesId { get; set; }
         public bool IsPremium { get; set; }
         public byte[] RowVersion { get; set; }
+        public int ZoningId { get; set; }
 
         public virtual ActivitySector ActivitySector { get; set; }
         public virtual Coordinates Coordinates { get; set; }
         public virtual User Creator { get; set; }
+        public virtual Zoning Zoning { get; set; }
     }
 }

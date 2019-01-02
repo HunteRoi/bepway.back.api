@@ -25,6 +25,10 @@ namespace DTO
         [DefaultValue(true)]
         public bool IsEnabled { get; set; }
 
+        [StringLength(1000)]
+        [DefaultValue(null)]
+        public string TodoList { get; set; }
+
         public byte[] RowVersion { get; set; }
     }
 }

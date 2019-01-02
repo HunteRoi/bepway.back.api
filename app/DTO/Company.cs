@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace DTO
@@ -30,6 +31,7 @@ namespace DTO
         [Required]
         public DateTime CreationDate { get; set; }
 
+        [DefaultValue(false)]
         public Boolean IsPremium { get; set; }
 
         public byte[] RowVersion { get; set; }
@@ -41,5 +43,6 @@ namespace DTO
 
         public User Creator { get; set; }
 
+        public Zoning Zoning { get; set; }
     }
 }

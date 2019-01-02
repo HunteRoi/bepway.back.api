@@ -1,15 +1,21 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+
 using Model;
 
 namespace DAL
 {
     public partial class BepwayContext : DbContext
     {
-        public BepwayContext() { }
+        public BepwayContext()
+        {
+        }
 
-        public BepwayContext(DbContextOptions/*<BepwayContext>*/ options) : base(options) { }
+        public BepwayContext(DbContextOptions/*<BepwayContext>*/ options)
+            : base(options)
+        {
+        }
 
         public virtual DbSet<ActivitySector> ActivitySector { get; set; }
         public virtual DbSet<Company> Company { get; set; }
@@ -90,6 +96,8 @@ namespace DAL
                     .HasColumnName("status")
                     .HasMaxLength(50);
 
+                entity.Property(e => e.ZoningId).HasColumnName("zoning_id");
+
                 entity.HasOne(d => d.ActivitySector)
                     .WithMany(p => p.Company)
                     .HasForeignKey(d => d.ActivitySectorId)
@@ -107,6 +115,12 @@ namespace DAL
                     .HasForeignKey(d => d.CreatorId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .HasConstraintName("companyCreator_fk");
+
+                entity.HasOne(d => d.Zoning)
+                    .WithMany(p => p.Company)
+                    .HasForeignKey(d => d.ZoningId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("zoning_fk");
             });
 
             modelBuilder.Entity<Coordinates>(entity =>
@@ -199,9 +213,7 @@ namespace DAL
                     .HasColumnName("name")
                     .HasMaxLength(200);
 
-                entity.Property(e => e.Url)
-                    .HasColumnName("url")
-                    .HasMaxLength(200);
+                entity.Property(e => e.Nsitid).HasColumnName("nsitid");
 
                 entity.HasOne(d => d.Coordinates)
                     .WithMany(p => p.Zoning)
