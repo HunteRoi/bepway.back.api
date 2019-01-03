@@ -19,7 +19,7 @@ namespace Model
         public string Roles { get; set; }
         public bool IsEnabled { get; set; }
         public string TodoList { get; set; }
-        public int CreatorId { get; set; }
+        public int? CreatorId { get; set; }
         public byte[] RowVersion { get; set; }
 
         public virtual User Creator { get; set; }
