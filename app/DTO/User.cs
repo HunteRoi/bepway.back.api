@@ -27,5 +27,7 @@ namespace DTO
         public string TodoList { get; set; }
 
         public byte[] RowVersion { get; set; }
+        
+        public int? CreatorId { get; set; }
     }
 }

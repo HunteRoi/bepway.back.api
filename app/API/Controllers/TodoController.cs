@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace API.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Route("api/[Controller]")]
+    [Route("api/User")]
     [Produces("application/json")]
     [Consumes("application/json")]
     public class TodoController : APIController
@@ -22,7 +22,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int}/todo")]
         [SwaggerOperation(
             Summary = "Change a user's todo list based on their ID",
             Description = "Returns the edited user data",
