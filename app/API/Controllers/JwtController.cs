@@ -39,6 +39,9 @@ namespace API.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            loginModel.Login = loginModel.Login.Trim();
+            loginModel.Password = loginModel.Password.Trim();
+            
             Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAsync(loginModel.Login);
             if (userFound == null || !userFound.IsEnabled) return NotFound();
 

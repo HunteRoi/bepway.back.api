@@ -11,6 +11,9 @@ namespace DTO
 
         [Required]
         public string Name { get; set; }
+        
+        [Required]
+        public string Address { get; set; }
 
         [Url]
         public string ImageUrl { get; set; }
@@ -21,25 +24,23 @@ namespace DTO
         public string Description { get; set; }
 
         public string Status { get; set; }
-
-        [Required]
-        public string Address { get; set; }
-
-        [Required]
-        public DateTime CreationDate { get; set; }
-
-        [DefaultValue(false)]
-        public Boolean IsPremium { get; set; }
-
-        public byte[] RowVersion { get; set; }
-
+        
         public ActivitySector ActivitySector { get; set; }
 
         [Required]
         public Coordinates Coordinates { get; set; }
 
-        public User Creator { get; set; }
+        [Required]
+        public int ZoningId { get; set; }
+        
+        public string CreatorId { get; set; }
 
-        public Zoning Zoning { get; set; }
+        [Required]
+        public DateTime CreationDate { get; set; }
+
+        [DefaultValue(false)]
+        public bool IsPremium { get; set; }
+
+        public byte[] RowVersion { get; set; }
     }
 }

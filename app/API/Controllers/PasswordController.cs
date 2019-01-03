@@ -36,6 +36,10 @@ namespace API.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            model.Login = model.Login.Trim();
+            model.Password = model.Password.Trim();
+            model.NewPassword = model.NewPassword.Trim();
+
             Model.User userFound = await dataAccess.FindByLoginAsync(model.Login);
             Model.User entity = await dataAccess.FindByIdAsync(id);
             if ((userFound == null || entity == null) && userFound == entity) return NotFound();

@@ -20,14 +20,14 @@ namespace DTO
         [DefaultValue("Guest")]
         public string Roles { get; set; }
 
-        [DefaultValue(true)]
-        public bool IsEnabled { get; set; }
-
         [StringLength(1000)]
         public string TodoList { get; set; }
-
-        public byte[] RowVersion { get; set; }
         
         public int? CreatorId { get; set; }
+        
+        [DefaultValue(true)]
+        public bool IsEnabled { get; set; }
+        
+        public byte[] RowVersion { get; set; }
     }
 }

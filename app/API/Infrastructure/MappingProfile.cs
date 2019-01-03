@@ -12,21 +12,29 @@ namespace API.Infrastructure
 
             CreateMap<Model.User, DTO.User>();
             CreateMap<DTO.User, Model.User>()
+                .ForMember(user => user.Login, opt => opt.MapFrom(user => user.Login.Trim()))
+                .ForMember(user => user.TodoList, opt => opt.MapFrom(user => user.TodoList.Trim()))
                 .ForMember(user => user.Id, opt => opt.Ignore())
                 .ForMember(user => user.Password, opt => opt.Ignore())
                 .ForMember(user => user.Roles, opt => opt.NullSubstitute("Guest"));
             CreateMap<DTO.SignupModel, Model.User>()
-                .ForMember(user => user.Roles, opt => opt.NullSubstitute("Guest"));
+                .ForMember(user => user.Login, opt => opt.MapFrom(user => user.Login.Trim()))
+                .ForMember(user => user.TodoList, opt => opt.MapFrom(user => user.TodoList.Trim()))
+                .ForMember(user => user.Password, opt => opt.MapFrom(user => user.Password.Trim()))
+                .ForMember(user => user.Email, opt => opt.MapFrom(user => user.Email.Trim()))
+                .ForMember(user => user.Roles, opt => opt.MapFrom(user => user.Roles == null ? "Guest" : user.Roles.Trim()));
 
             CreateMap<Model.Company, DTO.Company>();
             CreateMap<DTO.Company, Model.Company>()
                 .ForMember(company => company.Id, opt => opt.Ignore())
-                .ForMember(company => company.IdOpenData, opt => opt.Ignore());
+                .ForMember(company => company.IdOpenData, opt => opt.Ignore())
+                .ForMember(company => company.IsPremium, opt => opt.NullSubstitute(false))
+                .ForMember(company => company.Status, opt => opt.NullSubstitute(Model.Constants.Status.DRAFT));
 
             CreateMap<Model.Zoning, DTO.Zoning>()
-                .ForMember(z => z.Surface, opt => opt.ConvertUsing(new DoubleSurfaceConverter()));
+                .ForMember(zoning => zoning.Surface, opt => opt.ConvertUsing(new DoubleSurfaceConverter()));
             CreateMap<DTO.Zoning, Model.Zoning>()
-                .ForMember(z => z.Surface, opt => opt.ConvertUsing(new StringSurfaceConverter()))
+                .ForMember(zoning => zoning.Surface, opt => opt.ConvertUsing(new StringSurfaceConverter()))
                 .ForMember(zoning => zoning.Id, opt => opt.Ignore())
                 .ForMember(zoning => zoning.IdOpenData, opt => opt.Ignore());
 
@@ -35,11 +43,12 @@ namespace API.Infrastructure
                 .ForMember(sector => sector.Id, opt => opt.Ignore());
 
             CreateMap<Model.Coordinates, DTO.Coordinates>()
-                .ForMember(c => c.Latitude, opt => opt.ConvertUsing(new DoubleCoordinatesConverter()))
-                .ForMember(c => c.Longitude, opt => opt.ConvertUsing(new DoubleCoordinatesConverter()));
+                .ForMember(coordinates => coordinates.Latitude, opt => opt.ConvertUsing(new DoubleCoordinatesConverter()))
+                .ForMember(coordinates => coordinates.Longitude, opt => opt.ConvertUsing(new DoubleCoordinatesConverter()));
             CreateMap<DTO.Coordinates, Model.Coordinates>()
-                .ForMember(c => c.Latitude, opt => opt.ConvertUsing(new StringCoordinatesConverter()))
-                .ForMember(c => c.Longitude, opt => opt.ConvertUsing(new StringCoordinatesConverter()));
+                .ForMember(coordinates => coordinates.Id, opt => opt.Ignore())
+                .ForMember(coordinates => coordinates.Latitude, opt => opt.ConvertUsing(new StringCoordinatesConverter()))
+                .ForMember(coordinates => coordinates.Longitude, opt => opt.ConvertUsing(new StringCoordinatesConverter()));
         }
     }
 }

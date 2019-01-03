@@ -6,4 +6,5 @@ namespace Model
     {
         public BusinessException(string message) : base(message) { }
     }
+    
 }
