@@ -26,7 +26,7 @@ namespace DTO
         
         public int? CreatorId { get; set; }
         
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool IsEnabled { get; set; }
         
         public byte[] RowVersion { get; set; }

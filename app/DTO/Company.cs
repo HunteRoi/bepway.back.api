@@ -8,6 +8,9 @@ namespace DTO
     {
         [Required]
         public decimal Id { get; set; }
+        
+        [Required]
+        public string IdOpenData { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -33,6 +36,7 @@ namespace DTO
         [Required]
         public int ZoningId { get; set; }
         
+        [Required]
         public string CreatorId { get; set; }
 
         [Required]
