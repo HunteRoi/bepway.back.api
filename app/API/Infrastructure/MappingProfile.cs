@@ -19,7 +19,6 @@ namespace API.Infrastructure
                 .ForMember(user => user.TodoList, opt => opt.MapFrom(user => user.TodoList.Trim()));
             CreateMap<DTO.SignupModel, Model.User>()
                 .ForMember(user => user.Login, opt => opt.MapFrom(user => user.Login.Trim()))
-                .ForMember(user => user.IsEnabled, opt => opt.NullSubstitute(true))
                 .ForMember(user => user.Email, opt => opt.MapFrom(user => user.Email.Trim()))
                 .ForMember(user => user.TodoList, opt => opt.MapFrom(user => user.TodoList.Trim()))
                 .ForMember(user => user.Password, opt => opt.MapFrom(user => user.Password.Trim()))
@@ -28,7 +27,6 @@ namespace API.Infrastructure
             CreateMap<Model.Company, DTO.Company>();
             CreateMap<DTO.Company, Model.Company>()
                 .ForMember(company => company.Id, opt => opt.Ignore())
-                .ForMember(company => company.IsPremium, opt => opt.NullSubstitute(false))
                 .ForMember(company => company.Status, opt => opt.NullSubstitute(Model.Constants.Status.DRAFT));
 
             CreateMap<Model.Zoning, DTO.Zoning>()
