@@ -12,7 +12,6 @@ namespace DTO
         [Required]
         public string Password { get; set; }
 
-        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
@@ -28,6 +27,9 @@ namespace DTO
         [StringLength(1000)]
         [DefaultValue(null)]
         public string TodoList { get; set; }
+
+        [Required]
+        public int CreatorId { get; set; }
 
         public byte[] RowVersion { get; set; }
     }

@@ -21,6 +21,7 @@ namespace DTO
         public string Roles { get; set; }
 
         [StringLength(1000)]
+        [DefaultValue(null)]
         public string TodoList { get; set; }
         
         public int? CreatorId { get; set; }
