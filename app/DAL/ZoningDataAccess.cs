@@ -32,13 +32,14 @@ namespace DAL
             return ZoningQueryBase().Where(z => zoningName == null || z.Name.ToLower().Contains(zoningName.ToLower())).Count();
         }
 
-        public override async Task<IEnumerable<Zoning>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String zoningName = null)
+        public override Task<IEnumerable<Zoning>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String zoningName = null)
         {
-            return await ZoningQueryBase()
+            return Task.Run(() => ZoningQueryBase()
                 .Where(zoning => zoningName == null || zoning.Name.ToLower().Contains(zoningName.ToLower()))
                 .OrderBy(zoning => zoning.Id)
                 .TakePage(pageIndex.Value, pageSize.Value)
-                .ToArrayAsync();
+                .AsEnumerable()
+            );
         }
 
         public override Task<Zoning> FindByIdAsync(int id)

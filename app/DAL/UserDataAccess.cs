@@ -25,13 +25,14 @@ namespace DAL
                 .Count();
         }
 
-        public override async Task<IEnumerable<User>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String userName = null)
+        public override Task<IEnumerable<User>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String userName = null)
         {
-            return await Context.User
+            return Task.Run(() => Context.User
                 .Where(user => userName == null || user.Login.ToLower().Contains(userName.ToLower()))
                 .OrderBy(user => user.Id)
                 .TakePage(pageIndex.Value, pageSize.Value)
-                .ToArrayAsync();
+                .AsEnumerable()
+            );
         }
 
         public override Task<User> FindByIdAsync(int id)

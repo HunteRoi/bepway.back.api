@@ -40,20 +40,19 @@ namespace DAL
                 .Count();
         }
 
-        public override async Task<IEnumerable<Company>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null)
+        public override Task<IEnumerable<Company>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null)
         {
-            var companies = await CompanyQueryBase()
+            return Task.Run(() => CompanyQueryBase()
                 .Where(company => companyName == null || company.Name.ToLower().Contains(companyName.ToLower()))
                 .OrderBy(company => company.Id)
                 .TakePage(pageIndex, pageSize)
-                .ToListAsync();
-            return companies;
+                .AsEnumerable()
+            );
         }
 
-        public async Task<IEnumerable<Company>> GetAllByZoningIdAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null, int? zoningId = null)
+        public Task<IEnumerable<Company>> GetAllByZoningIdAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null, int? zoningId = null)
         {
-            var variable= (await GetAllAsync(pageIndex, pageSize, companyName)).Where(company => zoningId == null || company.ZoningId == zoningId);
-            return variable;
+            return Task.Run(() => GetAllAsync(pageIndex, pageSize, companyName).GetAwaiter().GetResult().Where(company => zoningId == null || company.ZoningId == zoningId));
         }
 
         public override Task<Company> FindByIdAsync(int id)
