@@ -7,11 +7,10 @@ namespace DAL
 {
     public static class IExtensionIEnumerable
     {
-        public static IQueryable<T> TakePage<T>(this IQueryable<T> query, int? pageIndex = 0, int? pageSize = 5)
+        public static IQueryable<T> TakePage<T>(this IQueryable<T> query, int? pageIndex = Model.Constants.Page.Index, int? pageSize = Model.Constants.Page.Size)
         {
-            return query
-                .Take(pageSize.Value)
-                .Skip(pageIndex.Value * pageSize.Value);
+            var obj= query.Skip(pageIndex.Value * pageSize.Value).Take(pageSize.Value);
+            return obj;
         }
     }
 }

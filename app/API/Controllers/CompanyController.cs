@@ -41,10 +41,11 @@ namespace API.Controllers
         [SwaggerResponse(400, "If the zoning does not exist")]
         public async Task<IActionResult> Get(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null, int? idZoning = null)
         {
+            int totalCount = dataAccess.GetTotalCount();
             IEnumerable<Model.Company> entities = await dataAccess.GetAllByZoningIdAsync(pageIndex, pageSize, companyName, idZoning);
             if (entities == null) return NotFound();
 
-            Request.HttpContext.Response.Headers.Add("X-TotalCount", dataAccess.GetTotalCount().ToString());
+            Request.HttpContext.Response.Headers.Add("X-TotalCount", totalCount.ToString());
             Request.HttpContext.Response.Headers.Add("X-PageIndex", pageIndex.Value.ToString());
             Request.HttpContext.Response.Headers.Add("X-PageSize", pageSize.Value.ToString());
 

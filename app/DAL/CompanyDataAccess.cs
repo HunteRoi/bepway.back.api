@@ -42,16 +42,18 @@ namespace DAL
 
         public override async Task<IEnumerable<Company>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null)
         {
-            return await CompanyQueryBase()
+            var companies = await CompanyQueryBase()
                 .Where(company => companyName == null || company.Name.ToLower().Contains(companyName.ToLower()))
                 .OrderBy(company => company.Id)
-                .TakePage(pageIndex.Value, pageSize.Value)
+                .TakePage(pageIndex, pageSize)
                 .ToListAsync();
+            return companies;
         }
 
         public async Task<IEnumerable<Company>> GetAllByZoningIdAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null, int? zoningId = null)
         {
-            return (await GetAllAsync(pageIndex, pageSize, companyName)).Where(company => zoningId == null || company.ZoningId == zoningId);
+            var variable= (await GetAllAsync(pageIndex, pageSize, companyName)).Where(company => zoningId == null || company.ZoningId == zoningId);
+            return variable;
         }
 
         public override Task<Company> FindByIdAsync(int id)
