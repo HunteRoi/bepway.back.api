@@ -59,7 +59,7 @@ namespace DAL
             return data;
         }
         
-        public async Task<Zoning> EditAsync(Zoning data)
+        public override async Task<Zoning> EditAsync(Zoning data)
         {
             if (Context.Entry(data).State == EntityState.Detached)
             {

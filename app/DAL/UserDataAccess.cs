@@ -52,7 +52,7 @@ namespace DAL
             return data;
         }
 
-        public async Task<User> EditAsync(User data)
+        public override async Task<User> EditAsync(User data)
         {
             if (Context.Entry(data).State == EntityState.Detached)
             {

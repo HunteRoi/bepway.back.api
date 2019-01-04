@@ -16,6 +16,7 @@ namespace DAL
         public abstract Task<IEnumerable<T>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String name = null);
         public abstract Task<T> FindByIdAsync(int id);
         public abstract Task<T> AddAsync(T data);
+        public abstract Task<T> EditAsync(T data);
         public abstract Task DeleteAsync(T data);
     }
 }
