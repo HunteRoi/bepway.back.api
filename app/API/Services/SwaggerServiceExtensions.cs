@@ -30,6 +30,8 @@ namespace API.Services
 
                 c.DescribeAllParametersInCamelCase();
 
+                //c.OrderActionsBy();
+
                 c.AddSecurityDefinition("Bearer", new ApiKeyScheme
                 {
                     In = "header",

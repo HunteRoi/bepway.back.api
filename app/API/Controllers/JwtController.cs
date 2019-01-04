@@ -30,7 +30,8 @@ namespace API.Controllers
         [SwaggerOperation(
             Summary = "Requests a token",
             Description = "Returns an access token and its expiration time in seconds",
-            Consumes = new string[] { "application/json " }
+            Consumes = new string[] { "application/json " },
+            Tags = new string[] { "Token" }
         )]
         [SwaggerResponse(200, "Returns a token object", typeof(DTO.Token))]
         [SwaggerResponse(400, "If the body does not validate the requirements")]
