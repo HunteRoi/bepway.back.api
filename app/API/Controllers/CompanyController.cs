@@ -38,11 +38,11 @@ namespace API.Controllers
             Description = "Returns a certain number of companies"
         )]
         [SwaggerResponse(200, "Returns an array of companies", typeof(IEnumerable<DTO.Company>))]
-        [SwaggerResponse(400, "If the zoning does not exist")]
-        public async Task<IActionResult> Get(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null, int? idZoning = null)
+        [SwaggerResponse(400, "If the provided research data do not match on one or more companies")]
+        public async Task<IActionResult> Get(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, int? zoningId = null, String companyName = null, String address = null, String activityName = null)
         {
             int totalCount = dataAccess.GetTotalCount();
-            IEnumerable<Model.Company> entities = await dataAccess.GetAllByZoningIdAsync(pageIndex, pageSize, companyName, idZoning);
+            IEnumerable<Model.Company> entities = await dataAccess.GetAllInfoAsync(pageIndex, pageSize, zoningId, companyName, address, activityName);
             if (entities == null) return NotFound();
 
             Request.HttpContext.Response.Headers.Add("X-TotalCount", totalCount.ToString());

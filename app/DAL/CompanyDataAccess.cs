@@ -50,24 +50,22 @@ namespace DAL
             );
         }
 
-        public Task<IEnumerable<Company>> GetAllByZoningIdAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null, int? zoningId = null)
+        public Task<IEnumerable<Company>> GetAllInfoAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, int? zoningId = null, String companyName = null, String address = null, String activityName = null)
         {
-            return Task.Run(() => GetAllAsync(pageIndex, pageSize, companyName).GetAwaiter().GetResult().Where(company => zoningId == null || company.ZoningId == zoningId));
+            return Task.Run(() => GetAllAsync(pageIndex, pageSize, companyName).GetAwaiter().GetResult()
+                .Where(company =>
+                    (zoningId == null || company.ZoningId == zoningId)
+                    &&
+                    (address == null || company.Address.ToLower().Contains(address.ToLower()))
+                    &&
+                    (activityName == null || company.ActivitySector.Name.ToLower().Contains(activityName.ToLower()))
+                )
+            );
         }
 
         public override Task<Company> FindByIdAsync(int id)
         {
             return CompanyQueryBase().FirstOrDefaultAsync(c => c.Id == id);
-        }
-
-        private IEnumerable<Company> FindByName(string name)
-        {
-            return CompanyQueryBase().Where(c => c.Name.ToLower().Contains(name.ToLower()));
-        }
-
-        public Task<Company> FindByAddressAsync(string address)
-        {
-            return CompanyQueryBase().FirstOrDefaultAsync(company => company.Address.ToLower().Contains(address.ToLower()));
         }
 
         public override async Task<Company> AddAsync(Company data)
@@ -77,7 +75,7 @@ namespace DAL
             return data;
         }
 
-        public async Task<Company> EditAsync(Company data)
+        public override async Task<Company> EditAsync(Company data)
         {
             if (Context.Entry(data).State == EntityState.Detached)
             {
