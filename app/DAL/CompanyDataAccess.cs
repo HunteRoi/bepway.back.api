@@ -42,24 +42,24 @@ namespace DAL
 
         public override Task<IEnumerable<Company>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String companyName = null)
         {
-            return Task.Run(() => CompanyQueryBase()
-                .Where(company => companyName == null || company.Name.ToLower().Contains(companyName.ToLower()))
-                .OrderBy(company => company.Id)
-                .TakePage(pageIndex, pageSize)
-                .AsEnumerable()
-            );
+            throw new NotImplementedException();
         }
 
         public Task<IEnumerable<Company>> GetAllInfoAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, int? zoningId = null, String companyName = null, String address = null, String activityName = null)
         {
-            return Task.Run(() => GetAllAsync(pageIndex, pageSize, companyName).GetAwaiter().GetResult()
-                .Where(company =>
+            return Task.Run(() => CompanyQueryBase()
+                .Where(company => 
+                    (companyName == null || company.Name.ToLower().Contains(companyName.ToLower()))
+                    &&
                     (zoningId == null || company.ZoningId == zoningId)
                     &&
                     (address == null || company.Address.ToLower().Contains(address.ToLower()))
                     &&
                     (activityName == null || company.ActivitySector.Name.ToLower().Contains(activityName.ToLower()))
                 )
+                .OrderBy(company => company.Id)
+                .TakePage(pageIndex, pageSize)
+                .AsEnumerable()
             );
         }
 
