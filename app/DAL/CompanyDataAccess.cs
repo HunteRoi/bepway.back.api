@@ -47,20 +47,23 @@ namespace DAL
 
         public Task<IEnumerable<Company>> GetAllInfoAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, int? zoningId = null, String companyName = null, String address = null, String activityName = null)
         {
-            return Task.Run(() => CompanyQueryBase()
-                .Where(company => 
-                    (companyName == null || company.Name.ToLower().Contains(companyName.ToLower()))
-                    &&
-                    (zoningId == null || company.ZoningId == zoningId)
-                    &&
-                    (address == null || company.Address.ToLower().Contains(address.ToLower()))
-                    &&
-                    (activityName == null || company.ActivitySector.Name.ToLower().Contains(activityName.ToLower()))
-                )
-                .OrderBy(company => company.Id)
-                .TakePage(pageIndex, pageSize)
-                .AsEnumerable()
+            var companies = Task.Run(() => pageSize.Equals(0) 
+                ? new Company[0].AsEnumerable() 
+                : CompanyQueryBase()
+                    .Where(company => 
+                        (zoningId == null || company.ZoningId == zoningId)
+                        &&
+                        (companyName == null || company.Name.ToLower().Contains(companyName.ToLower()))
+                        &&
+                        (address == null || company.Address.ToLower().Contains(address.ToLower()))
+                        &&
+                        (activityName == null || company.ActivitySector.Name.ToLower().Contains(activityName.ToLower()))
+                    )
+                    .OrderBy(company => company.Id)
+                    .TakePage(pageIndex, pageSize)
+                    .AsEnumerable()
             );
+            return companies;
         }
 
         public override Task<Company> FindByIdAsync(int id)
