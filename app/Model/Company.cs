@@ -15,7 +15,7 @@ namespace Model
         public string Address { get; set; }
         public DateTime CreationDate { get; set; }
         public int? ActivitySectorId { get; set; }
-        public string CreatorId { get; set; }
+        public String CreatorId { get; set; }
         public int CoordinatesId { get; set; }
         public bool IsPremium { get; set; }
         public byte[] RowVersion { get; set; }

@@ -36,8 +36,7 @@ namespace DTO
         [Required]
         public int ZoningId { get; set; }
         
-        [Required]
-        public string CreatorId { get; set; }
+        public String CreatorId { get; set; }
 
         [Required]
         public DateTime CreationDate { get; set; }
