@@ -45,6 +45,11 @@ namespace DAL
             return Context.User.FirstOrDefaultAsync(user => user.Login.ToLower().Contains(login.ToLower()));
         }
 
+        public Task<User> FindByStrictLoginAsync(string login)
+        {
+            return Context.User.FirstOrDefaultAsync(user => user.Login.ToLower().Equals(login.ToLower()));
+        }
+
         public override async Task<User> AddAsync(User data)
         {
             Context.User.Add(data);

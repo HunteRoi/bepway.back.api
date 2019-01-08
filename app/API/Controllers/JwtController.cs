@@ -43,7 +43,7 @@ namespace API.Controllers
             loginModel.Login = loginModel.Login.Trim();
             loginModel.Password = loginModel.Password.Trim();
             
-            Model.User userFound = await (new UserDataAccess(Context)).FindByLoginAsync(loginModel.Login);
+            Model.User userFound = await (new UserDataAccess(Context)).FindByStrictLoginAsync(loginModel.Login);
             if (userFound == null || !userFound.IsEnabled) return NotFound();
 
             List<string> data = userFound.Password.Split('.').ToList();
