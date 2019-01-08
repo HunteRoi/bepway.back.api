@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using DAL;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,11 @@ namespace API.Controllers
     public class TodoController : APIController
     {
         private readonly UserDataAccess dataAccess;
-        public TodoController(BepwayContext context)
+        public TodoController(BepwayContext context, IMapper mapper)
         {
             Context = context;
             dataAccess = new UserDataAccess(Context);
+            Mapper = mapper;
         }
 
         [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
@@ -31,13 +33,13 @@ namespace API.Controllers
         [SwaggerResponse(202, "Returns the edited user object", typeof(DTO.User))]
         [SwaggerResponse(400, "If the body does not validate the requirements", typeof(DTO.Error))]
         [SwaggerResponse(404, "If the resource isn't found or the user account is disabled")]
-        public async Task<IActionResult> PutTodo(int id, [FromBody] string todoList)
+        public async Task<IActionResult> PutTodo(int id, [FromBody] DTO.TodoList data)
         {
-            if (todoList.Length > 1000) return BadRequest(new DTO.Error { Message = "Todo list too long" });
+            if (!ModelState.IsValid) return BadRequest(new DTO.Error { Message = "To-do list too long" });
 
             Model.User entity = await dataAccess.FindByIdAsync(id);
             if (entity == null || !entity.IsEnabled) return NotFound();
-            entity.TodoList = todoList;
+            entity.TodoList = data.Todo;
 
             entity = await dataAccess.EditAsync(entity);
             return Accepted(Mapper.Map<DTO.User>(entity));
