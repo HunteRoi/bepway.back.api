@@ -27,11 +27,13 @@ namespace DAL
 
         public override Task<IEnumerable<User>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String userName = null)
         {
-            return Task.Run(() => Context.User
-                .Where(user => userName == null || user.Login.ToLower().Contains(userName.ToLower()))
-                .OrderBy(user => user.Id)
-                .TakePage(pageIndex.Value, pageSize.Value)
-                .AsEnumerable()
+            return Task.Run(() => pageSize.Value.Equals(0)
+                ? new User[0].AsEnumerable()
+                : Context.User
+                    .Where(user => userName == null || user.Login.ToLower().Contains(userName.ToLower()))
+                    .OrderBy(user => user.Id)
+                    .TakePage(pageIndex.Value, pageSize.Value)
+                    .AsEnumerable()
             );
         }
 

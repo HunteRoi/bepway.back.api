@@ -34,11 +34,13 @@ namespace DAL
 
         public override Task<IEnumerable<Zoning>> GetAllAsync(int? pageIndex = Constants.Page.Index, int? pageSize = Constants.Page.Size, String zoningName = null)
         {
-            return Task.Run(() => ZoningQueryBase()
-                .Where(zoning => zoningName == null || zoning.Name.ToLower().Contains(zoningName.ToLower()))
-                .OrderBy(zoning => zoning.Id)
-                .TakePage(pageIndex.Value, pageSize.Value)
-                .AsEnumerable()
+            return Task.Run(() => pageSize.Value.Equals(0)
+                ? new Zoning[0].AsEnumerable()
+                : ZoningQueryBase()
+                    .Where(zoning => zoningName == null || zoning.Name.ToLower().Contains(zoningName.ToLower()))
+                    .OrderBy(zoning => zoning.Id)
+                    .TakePage(pageIndex.Value, pageSize.Value)
+                    .AsEnumerable()
             );
         }
 
