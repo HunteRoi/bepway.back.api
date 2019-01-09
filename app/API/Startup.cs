@@ -130,7 +130,8 @@ namespace API
                 builder
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .WithExposedHeaders("X-TotalCount","X-PageSize","X-PageIndex");
             });
             #endregion
 
