@@ -28,24 +28,23 @@ namespace API.Services
                     ContentType = "application/json"
                 };
             }
-            else if (exception.GetType() == typeof(System.Data.SqlClient.SqlException) || exception.GetType().IsSubclassOf(typeof(Model.BusinessException)))
+            else 
             {
-                int statusCode = (int)((exception.GetType() == typeof(System.Data.SqlClient.SqlException))
-                    ? HttpStatusCode.InternalServerError
-                    : HttpStatusCode.BadRequest
-                );
-                string content = Newtonsoft.Json.JsonConvert.SerializeObject(new DTO.Error()
+                bool isSqlException = exception.GetType() == typeof(System.Data.SqlClient.SqlException);
+                if (isSqlException || exception.GetType().IsSubclassOf(typeof(Model.BusinessException)))
                 {
-                    Message = (exception.GetType() == typeof(System.Data.SqlClient.SqlException))
-                        ? "An unexpected error occurred. Try again later!"
-                        : exception.Message
-                });
-                context.Result = new ContentResult()
-                {
-                    StatusCode = statusCode,
-                    Content = content,
-                    ContentType = "application/json"
-                };
+                    int statusCode = (int)(isSqlException ? HttpStatusCode.InternalServerError : HttpStatusCode.BadRequest);
+                    string content = Newtonsoft.Json.JsonConvert.SerializeObject(new DTO.Error()
+                    {
+                        Message = isSqlException ? "An unexpected error occurred. Try again later!" : exception.Message
+                    });
+                    context.Result = new ContentResult()
+                    {
+                        StatusCode = statusCode,
+                        Content = content,
+                        ContentType = "application/json"
+                    };
+                }
             }
         }
     }
