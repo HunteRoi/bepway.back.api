@@ -36,7 +36,7 @@ namespace API.Controllers
         [SwaggerResponse(200, "Returns a token object", typeof(DTO.Token))]
         [SwaggerResponse(400, "If the body does not validate the requirements")]
         [SwaggerResponse(404, "If the user does not exist or the account is disabled")]
-        public async Task<IActionResult> Login([FromBody] DTO.LoginModel loginModel)
+        public async Task<IActionResult> Login([FromBody] DTO.LoginModel loginModel, bool adminConnection = false)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -44,7 +44,11 @@ namespace API.Controllers
             loginModel.Password = loginModel.Password.Trim();
             
             Model.User userFound = await (new UserDataAccess(Context)).FindByStrictLoginAsync(loginModel.Login);
-            if (userFound == null || !userFound.IsEnabled) return NotFound();
+            bool isFoundAndEnabled = userFound != null && userFound.IsEnabled;
+            if (adminConnection) {
+                if (!isFoundAndEnabled || userFound.Roles != Model.Constants.Roles.ADMIN || userFound.Roles != Model.Constants.Roles.GESTIONNARY) 
+                    return NotFound();
+            } else if (!isFoundAndEnabled) return NotFound();
 
             List<string> data = userFound.Password.Split('.').ToList();
             (string hashedCheck, string salt) = (data.ElementAt(0), data.ElementAt(1));
