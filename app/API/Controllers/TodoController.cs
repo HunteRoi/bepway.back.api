@@ -23,7 +23,7 @@ namespace API.Controllers
             Mapper = mapper;
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpPut("{id:int}/todo")]
         [SwaggerOperation(
             Summary = "Change a user's todo list based on their ID",

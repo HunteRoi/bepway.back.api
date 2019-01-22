@@ -2,6 +2,11 @@ using System;
 
 namespace Model {
     public static class Constants {
+        public static class AuthorizationRoles {
+            public const string ALL = "Admin, Gestionnary, Premium, Guest";
+            public const string ADMIN_AND_GESTIONNARY = "Admin, Gestionnary";
+        }
+        
         public static class Roles {
             public const string ADMIN = "Admin";
             public const string GESTIONNARY = "Gestionnary";

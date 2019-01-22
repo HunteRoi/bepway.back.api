@@ -26,7 +26,7 @@ namespace API.Controllers
             dataAccess = new UserDataAccess(Context);
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpGet]
         [SwaggerOperation(
             Summary = "Requests a page of users",
@@ -45,7 +45,7 @@ namespace API.Controllers
             return Ok(entities.Select(Mapper.Map<DTO.User>));
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpGet("{id:int}")]
         [SwaggerOperation(
             Summary = "Requests a user based on their ID",
@@ -61,7 +61,7 @@ namespace API.Controllers
             return Ok(Mapper.Map<DTO.User>(entity));
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpGet("{login}")]
         [SwaggerOperation(
             Summary = "Requests a user based on their login",

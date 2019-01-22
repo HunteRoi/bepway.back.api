@@ -26,7 +26,7 @@ namespace API.Controllers
             dataAccess = new ZoningDataAccess(Context);
         }
 
-        [Authorize(Roles = Model.Constants.Roles.GUEST + "," + Model.Constants.Roles.PREMIUM + "," + Model.Constants.Roles.GESTIONNARY + "," + Model.Constants.Roles.ADMIN)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ALL)]
         [HttpGet]
         [SwaggerOperation(
             Summary = "Requests a page of zonings",
@@ -49,7 +49,7 @@ namespace API.Controllers
             return Ok(zonings);
         }
 
-        [Authorize(Roles = Model.Constants.Roles.GUEST + "," + Model.Constants.Roles.PREMIUM + "," + Model.Constants.Roles.GESTIONNARY + "," + Model.Constants.Roles.ADMIN)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ALL)]
         [HttpGet("{id:int}")]
         [SwaggerOperation(
             Summary = "Requests a zoning based on their ID",
@@ -67,7 +67,7 @@ namespace API.Controllers
             return Ok(zoning);
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpPost]
         [SwaggerOperation(
             Summary = "Creates a zoning",
@@ -88,7 +88,7 @@ namespace API.Controllers
             return Created($"api/Zoning/{entity.Id}", zoning);
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpPut("{id:int}")]
         [SwaggerOperation(
             Summary = "Edits a zoning based on their ID",
@@ -112,7 +112,7 @@ namespace API.Controllers
             return Accepted(zoning);
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpDelete("{id:int}")]
         [SwaggerOperation(
             Summary = "Deletes a zoning",

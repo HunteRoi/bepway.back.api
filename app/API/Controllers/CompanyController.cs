@@ -31,7 +31,7 @@ namespace API.Controllers
             dataAccess = new CompanyDataAccess(Context);
         }
 
-        [Authorize(Roles = Model.Constants.Roles.GUEST + "," + Model.Constants.Roles.PREMIUM + "," + Model.Constants.Roles.GESTIONNARY + "," + Model.Constants.Roles.ADMIN)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ALL)]
         [HttpGet]
         [SwaggerOperation(
             Summary = "Requests a page of companies from a certain zoning if provided",
@@ -52,7 +52,7 @@ namespace API.Controllers
             return Ok(entities.Select(Mapper.Map<DTO.Company>));
         }
 
-        [Authorize(Roles = Model.Constants.Roles.GUEST + "," + Model.Constants.Roles.PREMIUM + "," + Model.Constants.Roles.GESTIONNARY + "," + Model.Constants.Roles.ADMIN)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ALL)]
         [HttpGet("{id:int}")]
         [SwaggerOperation(
             Summary = "Requests a company based on their ID",
@@ -68,7 +68,7 @@ namespace API.Controllers
             return Ok(Mapper.Map<DTO.Company>(entity));
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ALL)]
         [HttpPost]
         [SwaggerOperation(
             Summary = "Creates a company",
@@ -86,7 +86,7 @@ namespace API.Controllers
             return Created($"api/Company/{entity.Id}", Mapper.Map<DTO.Company>(entity));
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpPut("{id:int}")]
         [SwaggerOperation(
             Summary = "Edits a company based on their ID",
@@ -107,7 +107,7 @@ namespace API.Controllers
             return Accepted(Mapper.Map<DTO.Company>(entity));
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpDelete("{id:int}")]
         [SwaggerOperation(
             Summary = "Deletes a company based on their ID",

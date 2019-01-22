@@ -22,7 +22,7 @@ namespace API.Controllers
             dataAccess = new UserDataAccess(Context);
         }
 
-        [Authorize(Roles = Model.Constants.Roles.ADMIN + "," + Model.Constants.Roles.GESTIONNARY)]
+        [Authorize(Roles = Model.Constants.AuthorizationRoles.ADMIN_AND_GESTIONNARY)]
         [HttpPut("{id:int}/password")]
         [SwaggerOperation(
             Summary = "Change a user's password based on their ID",
